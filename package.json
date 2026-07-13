@@ -92,6 +92,7 @@
       ]
     },
     "linux": {
+      "executableName": "PS4RemotePKGSenderV2",
       "category": "Utility",
       "syncDesktopName": true,
       "target": [
