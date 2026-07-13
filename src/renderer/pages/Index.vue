@@ -56,6 +56,7 @@
         element-loading-background="rgba(255, 255, 255, 0.8)"
         :empty-text="$t('common.table.noData')"
         :max-height="tableMaxHeight"
+        :row-class-name="getRowClassName"
     style="width: 100%">
 
       <el-table-column type="index" label="#" width="55" align="center"></el-table-column>
@@ -165,16 +166,10 @@
           <template v-if="scope.row.sfo?.readSFOHeader && scope.row.sfo.TITLE">
             <div class="sfo-title">
               <span class="sfo-title-name-tag">{{ scope.row.sfo.TITLE }}</span>
-            </div>
-            <div class="sfo-title">
-              <!--              <el-tag size="mini" type="warning" class="sfo-title-id-tag" v-if="showCUSA && scope.row.cusa">{{ scope.row.cusa }}</el-tag>-->
-              <span class="sfo-version-tag" v-if="scope.row.sfo.VERSION">[{{ scope.row.sfo.VERSION }}]</span>
-              <span class="sfo-title-id-tag" v-if="scope.row.sfo.TITLE_ID">[{{ scope.row.sfo.TITLE_ID }}]</span>
+              <span class="sfo-title-id-tag" v-if="scope.row.sfo.TITLE_ID">{{ scope.row.sfo.TITLE_ID }}</span>
             </div>
             <div class="sfo-subtitle">
               <span class="sfo-filename">{{ scope.row.name }}</span>
-              <el-tag size="small" :type="$helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).color" class="sfo-category-tag" v-if="scope.row.sfo.CATEGORY">{{ $helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).label }}</el-tag>
-              <el-tag size="small" type="info" class="sfo-contentid-tag"> {{ scope.row.sfo.CONTENT_ID }}</el-tag>
             </div>
           </template>
           <template v-else>
@@ -198,6 +193,22 @@
       <el-table-column :label="$t('common.table.version')" width="90" v-if="showVersion">
         <template slot-scope="scope">
           <el-tag size="small" type="info" v-if="scope.row.sfo?.VERSION">{{ scope.row.sfo.VERSION }}</el-tag>
+          <span v-else>-</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column :label="$t('common.table.category')" width="90" align="center">
+        <template slot-scope="scope">
+          <template v-if="scope.row.sfo?.CATEGORY">
+            <el-tooltip :content="baseGameBlockedTooltip(scope.row)" placement="top" :disabled="!isBlockedByMissingBase(scope.row)">
+              <span>
+                <el-tag size="small" :type="$helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).color">
+                  {{ $helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).label }}
+                </el-tag>
+                <i class="el-icon-time" style="color: #e6a23c; margin-left: 3px;" v-if="isBlockedByMissingBase(scope.row)"/>
+              </span>
+            </el-tooltip>
+          </template>
           <span v-else>-</span>
         </template>
       </el-table-column>
@@ -277,7 +288,7 @@ export default {
       loading: false,
       showTask: true,
       showCUSA: false,
-      showVersion: false,
+      showVersion: true,
       showPercentage: true,
       showExtension: false,
       showDebugInRow: false,
@@ -330,7 +341,18 @@ export default {
     sfoEnabled: get('app/getReadSFOHeader'),
     getPS4TargetApp: get('app/getPS4TargetApp'),
     files() {
-      return this.queueFiles.filter(file => this.$helper.matchesFileSearch(file, this.search))
+      const filtered = this.queueFiles.filter(file => this.$helper.matchesFileSearch(file, this.search))
+      return this.$helper.groupAndSortQueueFiles(filtered)
+    },
+    // Maps each TITLE_ID to a group index so rows can get alternating backgrounds
+    titleIdGroupMap() {
+      const map = new Map()
+      let idx = 0
+      this.files.forEach(file => {
+        const titleId = this.$helper.getTitleIdFromFile(file)
+        if (titleId && !map.has(titleId)) map.set(titleId, idx++)
+      })
+      return map
     },
     queueStats() {
       const installedKeys = new Set(this.installedFiles.map(file => file.path || file.name))
@@ -917,11 +939,55 @@ export default {
     },
 
     isQueueInstallCandidate(file) {
-      if (file.status == 'in queue')
-        return true
+      if (file.status !== 'in queue') {
+        return !this.skipInstalledQueueItems &&
+            file.status && file.status.startsWith('installed')
+      }
 
-      return !this.skipInstalledQueueItems &&
-          file.status && file.status.startsWith('installed')
+      // Patches and DLCs can only be installed after their base game is done
+      if (!this.isBaseGameReadyForFile(file))
+        return false
+
+      return true
+    },
+
+    // Returns true if this file is a patch or DLC whose base game is in the queue
+    // but has not been installed yet (blocking automatic installation).
+    isBlockedByMissingBase(file) {
+      const sfo = file.sfo || {}
+      const category = String(sfo.CATEGORY || '').toLowerCase()
+      if (!['gp', 'ac'].includes(category)) return false
+
+      const titleId = sfo.TITLE_ID || file.cusa
+      if (!titleId) return false
+
+      const baseGame = this.queueFiles.find(f => {
+        const fSfo = f.sfo || {}
+        return (fSfo.TITLE_ID || f.cusa) === titleId &&
+            String(fSfo.CATEGORY || '').toLowerCase() === 'gd'
+      })
+
+      if (!baseGame) return false // Base not in queue — assume already on console
+
+      const status = baseGame.status || ''
+      return !(status === 'finish' || status.startsWith('installed'))
+    },
+
+    // Returns true when it is safe to install this file (base game already done or not needed)
+    isBaseGameReadyForFile(file) {
+      return !this.isBlockedByMissingBase(file)
+    },
+
+    baseGameBlockedTooltip(file) {
+      const titleId = (file.sfo && file.sfo.TITLE_ID) || file.cusa || ''
+      return this.$t('queue.messages.baseGameRequired', { titleId })
+    },
+
+    getRowClassName({ row }) {
+      const titleId = this.$helper.getTitleIdFromFile(row)
+      if (!titleId) return ''
+      const groupIndex = this.titleIdGroupMap.get(titleId)
+      return groupIndex !== undefined && groupIndex % 2 === 1 ? 'row-group-alt' : ''
     },
 
     markQueueItemInstalledAndSkipped(file) {
@@ -1256,11 +1322,26 @@ export default {
     }
   }
 
+  /* Group-alternating row background to visually cluster related packages */
+  ::v-deep .row-group-alt {
+    td {
+      background-color: #f0f4ff;
+    }
+
+    &:hover td {
+      background-color: #e6edfd !important;
+    }
+  }
+
   .sfo-title {
     font-weight: 600;
     font-size: 14px;
     color: #303133;
     line-height: 1.3;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
   }
 
   .sfo-version-tag {
@@ -1275,12 +1356,12 @@ export default {
 
   .sfo-title-id-tag {
     display: inline-block;
-    background-color: #ecf5ff;
+    background-color: #e8f4ea;
     color: #1b7a60;
-    padding: 0 4px;
+    padding: 0 5px;
     border-radius: 3px;
-    font-size: 12px;
-    //margin-right: 4px;
+    font-size: 11px;
+    font-weight: 500;
   }
 
   .sfo-subtitle {
@@ -1292,15 +1373,6 @@ export default {
     .sfo-filename {
       display: block;
       word-break: break-all;
-    }
-
-    .sfo-category-tag {
-      margin-top: 2px;
-      margin-right: 4px;
-    }
-
-    .sfo-contentid-tag {
-      margin-top: 2px;
     }
   }
 

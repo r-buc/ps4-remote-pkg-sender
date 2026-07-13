@@ -2,7 +2,6 @@
   "app": {
     "title": "Remote Package Sender"
   },
-
   "common": {
     "buttons": {
       "test": "Verbindung testen",
@@ -42,7 +41,8 @@
       "progress": "Fortschritt",
       "cusa": "CUSA",
       "titleId": "Titel-ID",
-      "type": "Typ"
+      "type": "Typ",
+      "category": "دسته‌بندی"
     },
     "placeholder": {
       "search": "Suchen",
@@ -50,7 +50,6 @@
       "inputManually": "Manuell eingeben"
     }
   },
-
   "tabs": {
     "server": {
       "baseFiles": "Basisdateien",
@@ -63,7 +62,6 @@
     "settings": "Einstellungen",
     "changelog": "Änderungsprotokoll"
   },
-
   "menu": {
     "processingCenter": "Verarbeitungszentrum",
     "server": "Server",
@@ -84,36 +82,7 @@
     "localServer": "Lokaler Server",
     "playstation": "PlayStation"
   },
-
   "config": {
-    "server": {
-      "parameters": "Parameter"
-    },
-    "ps4": {
-      "title": "Playstation-Konfiguration",
-      "ip": "Playstation-IP",
-      "app": "Playstation-App",
-      "port": "App-Port",
-      "searchButton": "PlayStation im Netzwerk suchen",
-      "apps": {
-        "rpi": "PS4 RPI (flatZ)",
-        "rpiOOP": "PS4 RPI (OOP)",
-        "singleDPI": "PS5 singleDPI",
-        "goldhen": "PS4 GoldHEN",
-        "etaHEN": "PS5 etaHEN",
-        "ipi": "PS4 IPI",
-        "hbstore": "PS4 HB-Store"
-      },
-      "timeout": "Anfrage-Timeout",
-      "timeoutTip": "Setzen Sie einen höheren Anfrage-Timeout, wenn Sie Timeout-Fehler erhalten und Sie sicher sind, dass alles andere korrekt eingerichtet ist.",
-      "updateInterval": "Aktualisierungsintervall",
-      "updateIntervalTip": "Das Aktualisierungsintervall beeinflusst das Intervall zur Aktualisierung des Fortschritts einer Aufgabe. Ein höherer Wert bedeutet mehr Verzögerung zwischen den Aktualisierungen.",
-      "queueMode": "Nächstes Warteschlangenelement",
-      "queueModeImmediate": "Sofort",
-      "queueModeDelay": "Verzögert",
-      "queueDelay": "Warteschlangenverzögerung",
-      "queueDelaySeconds": "Sekunden"
-    },
     "server": {
       "title": "Lokale Serverkonfiguration",
       "ip": "Server-IP",
@@ -146,6 +115,31 @@
       "queueScannerTip": "Warteschlangen-Scanner aktivieren, um automatisch den nächsten Installationsprozess in der Warteschlange zu starten",
       "readSfoHeader": "SFO-Header lesen",
       "readSfoHeaderTip": "SFO-Header jeder PKG lesen und PKG-Informationen anzeigen"
+    },
+    "ps4": {
+      "title": "Playstation-Konfiguration",
+      "ip": "Playstation-IP",
+      "app": "Playstation-App",
+      "port": "App-Port",
+      "searchButton": "PlayStation im Netzwerk suchen",
+      "apps": {
+        "rpi": "PS4 RPI (flatZ)",
+        "rpiOOP": "PS4 RPI (OOP)",
+        "singleDPI": "PS5 singleDPI",
+        "goldhen": "PS4 GoldHEN",
+        "etaHEN": "PS5 etaHEN",
+        "ipi": "PS4 IPI",
+        "hbstore": "PS4 HB-Store"
+      },
+      "timeout": "Anfrage-Timeout",
+      "timeoutTip": "Setzen Sie einen höheren Anfrage-Timeout, wenn Sie Timeout-Fehler erhalten und Sie sicher sind, dass alles andere korrekt eingerichtet ist.",
+      "updateInterval": "Aktualisierungsintervall",
+      "updateIntervalTip": "Das Aktualisierungsintervall beeinflusst das Intervall zur Aktualisierung des Fortschritts einer Aufgabe. Ein höherer Wert bedeutet mehr Verzögerung zwischen den Aktualisierungen.",
+      "queueMode": "Nächstes Warteschlangenelement",
+      "queueModeImmediate": "Sofort",
+      "queueModeDelay": "Verzögert",
+      "queueDelay": "Warteschlangenverzögerung",
+      "queueDelaySeconds": "Sekunden"
     },
     "app": {
       "title": "Anwendungseinstellungen",
@@ -203,7 +197,6 @@
       "currentSettings": "Ihre aktuellen Einstellungen"
     }
   },
-
   "queue": {
     "title": "Dateien in Warteschlange",
     "stats": {
@@ -271,13 +264,13 @@
       "resetAllConfirm": "Dies wird Ihre Warteschlange, Aufgaben und installierten Elemente löschen.",
       "resetAllSuccess": "Warteschlange, Aufgaben und installierte Elemente wurden zurückgesetzt",
       "resetInstalledSuccess": "{count} installierte(s) Element(e) zurück in die Warteschlange gesetzt.",
-      "autostartStopped": "Warteschlangen-Autostart gestoppt."
+      "autostartStopped": "Warteschlangen-Autostart gestoppt.",
+      "baseGameRequired": "در انتظار نصب بازی پایه ({titleId})"
     },
     "operation": {
       "retryFailed": "Fehlgeschlagene Installation wiederholen"
     }
   },
-
   "server": {
     "messages": {
       "noBasePath": "Kein Server-Basispfad angegeben. Bitte zuerst konfigurieren.",
@@ -296,7 +289,6 @@
       "loadingFiles": "Serverdateien werden geladen"
     }
   },
-
   "hbstore": {
     "categories": {
       "all": "Alle",
@@ -334,7 +326,6 @@
       "title": "HB-Store R2 (Überarbeitet)"
     }
   },
-
   "settings": {
     "welcome": "Danke für die Nutzung meines <b>Remote Package Sender v2</b>!",
     "welcomeDetail": "Ich hoffe, es gefällt Ihnen bisher, was ich gebaut habe, und ich würde mich sehr über Feedback und Unterstützung freuen.",
@@ -343,7 +334,6 @@
     "todo": "Es gibt so viele tolle Funktionen auf meiner Todo-(Schwarz)-Liste, die noch nicht fertig sind.",
     "future": "Ich möchte mehr Zeit in dieses Tool investieren und Ihnen eines der besten Tools überhaupt bieten."
   },
-
   "download": {
     "title": "Downloads",
     "rpi": {
@@ -385,7 +375,6 @@
       "desc": "Wenn Sie Ihre Homebrew-App zum Download-Bereich hinzufügen möchten, kontaktieren Sie mich auf Discord unter"
     }
   },
-
   "messages": {
     "connection": {
       "ps4Accessible": "PS4 ist erreichbar",
@@ -435,7 +424,6 @@
       "noBasePath": "Kein Server-Basispfad angegeben. Bitte zuerst konfigurieren."
     }
   },
-
   "errors": {
     "singleDpiStatusFailed": "{filename} singleDPI-Status fehlgeschlagen",
     "singleDpiInstallError": "{filename} singleDPI-Installationsfehler",
@@ -446,7 +434,6 @@
     "invalidSingleDpiResponse": "Ungültige singleDPI-Antwort",
     "ps5ConnectionFailed": "PS5-Verbindung fehlgeschlagen"
   },
-
   "debug": {
     "checkHeartbeat": "Heartbeat prüfen",
     "startServer": "Server starten",

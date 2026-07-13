@@ -2,7 +2,6 @@
   "app": {
     "title": "Remote Package Sender"
   },
-
   "common": {
     "buttons": {
       "test": "Verbindung testen",
@@ -45,7 +44,8 @@
       "cusa": "CUSA",
       "titleId": "Titel-ID",
       "type": "Typ",
-      "noData": "Keine Daten"
+      "noData": "Keine Daten",
+      "category": "Kategorie"
     },
     "placeholder": {
       "search": "Suchen",
@@ -53,7 +53,6 @@
       "inputManually": "Manuell eingeben"
     }
   },
-
   "menu": {
     "processingCenter": "Verarbeitungszentrum",
     "server": "Server",
@@ -77,7 +76,6 @@
     "closeConfirm": "Möchten Sie die Anwendung wirklich schließen? Dies stoppt den Server und alle untergeordneten Prozesse.",
     "closeTitle": "Warnung"
   },
-
   "tabs": {
     "server": {
       "baseFiles": "Basisdateien",
@@ -90,7 +88,6 @@
     "settings": "Einstellungen",
     "changelog": "Änderungsprotokoll"
   },
-
   "config": {
     "ps4": {
       "title": "Playstation-Konfiguration",
@@ -215,7 +212,6 @@
       "currentSettings": "Ihre aktuellen Einstellungen"
     }
   },
-
   "queue": {
     "title": "Dateien in Warteschlange",
     "stats": {
@@ -284,13 +280,13 @@
       "resetAllConfirm": "Dies wird Ihre Warteschlange, Aufgaben und installierten Elemente löschen.",
       "resetAllSuccess": "Warteschlange, Aufgaben und installierte Elemente wurden zurückgesetzt",
       "resetInstalledSuccess": "{count} installierte(s) Element(e) zurück in die Warteschlange gesetzt.",
-      "autostartStopped": "Warteschlangen-Autostart gestoppt."
+      "autostartStopped": "Warteschlangen-Autostart gestoppt.",
+      "baseGameRequired": "Warte auf Installation des Basisspiels ({titleId})"
     },
     "operation": {
       "retryFailed": "Fehlgeschlagene Installation wiederholen"
     }
   },
-
   "server": {
     "pageTitle": "Server-Anwendung",
     "tabs": {
@@ -319,7 +315,6 @@
       "heartbeatSuccess": "Glückwunsch. Heartbeat funktioniert"
     }
   },
-
   "hbstore": {
     "categories": {
       "all": "Alle",
@@ -358,7 +353,6 @@
     },
     "noData": "Keine Pakete gefunden"
   },
-
   "settings": {
     "welcome": "Danke für die Nutzung meines <b>Remote Package Sender v2</b>!",
     "welcomeDetail": "Ich hoffe, es gefällt Ihnen bisher, was ich gebaut habe, und ich würde mich sehr über Feedback und Unterstützung freuen.",
@@ -367,7 +361,6 @@
     "todo": "Es gibt so viele tolle Funktionen auf meiner Todo-(Schwarz)-Liste, die noch nicht fertig sind.",
     "future": "Ich möchte mehr Zeit in dieses Tool investieren und Ihnen eines der besten Tools überhaupt bieten."
   },
-
   "download": {
     "title": "Downloads",
     "rpi": {
@@ -409,7 +402,6 @@
       "desc": "Wenn Sie Ihre Homebrew-App zum Download-Bereich hinzufügen möchten, kontaktieren Sie mich auf Discord unter"
     }
   },
-
   "messages": {
     "connection": {
       "ps4Accessible": "PS4 ist erreichbar",
@@ -459,7 +451,6 @@
       "noBasePath": "Kein Server-Basispfad angegeben. Bitte zuerst konfigurieren."
     }
   },
-
   "errors": {
     "singleDpiStatusFailed": "{filename} singleDPI-Status fehlgeschlagen",
     "singleDpiInstallError": "{filename} singleDPI-Installationsfehler",
@@ -470,7 +461,6 @@
     "invalidSingleDpiResponse": "Ungültige singleDPI-Antwort",
     "ps5ConnectionFailed": "PS5-Verbindung fehlgeschlagen"
   },
-
   "debug": {
     "checkHeartbeat": "Heartbeat prüfen",
     "startServer": "Server starten",

@@ -2,7 +2,6 @@
   "app": {
     "title": "Remote Package Sender"
   },
-
   "common": {
     "buttons": {
       "test": "Test connection",
@@ -50,10 +49,10 @@
       "cusa": "CUSA",
       "titleId": "Title ID",
       "type": "Type",
-      "noData": "No Data"
+      "noData": "No Data",
+      "category": "Category"
     }
   },
-
   "menu": {
     "processingCenter": "Processing Center",
     "server": "Server",
@@ -77,7 +76,6 @@
     "closeConfirm": "Do you really want to close the Application? This stops the server and all child processes.",
     "closeTitle": "Warning"
   },
-
   "tabs": {
     "server": {
       "baseFiles": "Base Files",
@@ -90,37 +88,7 @@
     "settings": "Settings",
     "changelog": "Changelog"
   },
-
   "config": {
-    "server": {
-      "parameters": "Parameters"
-    },
-    "ps4": {
-      "title": "Playstation Configuration",
-      "ip": "Playstation IP",
-      "app": "Playstation App",
-      "port": "App Port",
-      "searchButton": "Search for PlayStation in Network",
-      "apps": {
-        "rpi": "PS4 RPI (flatZ)",
-        "rpiOOP": "PS4 RPI (OOP)",
-        "singleDPI": "PS5 singleDPI",
-        "goldhen": "PS4 GoldHEN",
-        "etaHEN": "PS5 etaHEN",
-        "ipi": "PS4 IPI",
-        "hbstore": "PS4 HB-Store"
-      },
-      "timeout": "Request Timeout",
-      "timeoutTip": "Set a higher Request Timeout if you get timeout errors and you are sure that everything else is setup correctly.",
-      "updateInterval": "Update Interval",
-      "updateIntervalTip": "Update Interval affects the interval to update the progress on a task. Higher value means more delay between updates.",
-      "queueMode": "Next Queue Item",
-      "queueModeImmediate": "Immediately",
-      "queueModeDelay": "Delay",
-      "queueDelay": "Queue Delay",
-      "queueDelaySeconds": "seconds",
-      "parameters": "Parameters"
-    },
     "server": {
       "title": "Local Server Configuration",
       "ip": "Server IP",
@@ -161,6 +129,32 @@
       "queueScannerTip": "Enable Queue Scanner to automatically start the next install process on the Queue",
       "readSfoHeader": "Read SFO Header",
       "readSfoHeaderTip": "Read SFO Header of each PKG and show PKG Information"
+    },
+    "ps4": {
+      "title": "Playstation Configuration",
+      "ip": "Playstation IP",
+      "app": "Playstation App",
+      "port": "App Port",
+      "searchButton": "Search for PlayStation in Network",
+      "apps": {
+        "rpi": "PS4 RPI (flatZ)",
+        "rpiOOP": "PS4 RPI (OOP)",
+        "singleDPI": "PS5 singleDPI",
+        "goldhen": "PS4 GoldHEN",
+        "etaHEN": "PS5 etaHEN",
+        "ipi": "PS4 IPI",
+        "hbstore": "PS4 HB-Store"
+      },
+      "timeout": "Request Timeout",
+      "timeoutTip": "Set a higher Request Timeout if you get timeout errors and you are sure that everything else is setup correctly.",
+      "updateInterval": "Update Interval",
+      "updateIntervalTip": "Update Interval affects the interval to update the progress on a task. Higher value means more delay between updates.",
+      "queueMode": "Next Queue Item",
+      "queueModeImmediate": "Immediately",
+      "queueModeDelay": "Delay",
+      "queueDelay": "Queue Delay",
+      "queueDelaySeconds": "seconds",
+      "parameters": "Parameters"
     },
     "app": {
       "title": "Application Settings",
@@ -218,7 +212,6 @@
       "currentSettings": "Your current settings object"
     }
   },
-
   "queue": {
     "title": "Files in Queue",
     "stats": {
@@ -287,13 +280,13 @@
       "resetAllConfirm": "This will clear your Queue, Tasks and Installed states.",
       "resetAllSuccess": "Queue, Tasks and Installed state has been resetted",
       "resetInstalledSuccess": "Reset {count} installed item(s) to the queue.",
-      "autostartStopped": "Queue Autostart stopped."
+      "autostartStopped": "Queue Autostart stopped.",
+      "baseGameRequired": "Waiting for base game ({titleId}) to be installed first"
     },
     "operation": {
       "retryFailed": "Retry failed installation"
     }
   },
-
   "server": {
     "pageTitle": "Server Application",
     "tabs": {
@@ -322,7 +315,6 @@
       "heartbeatSuccess": "Congrats. Heartbeat is working"
     }
   },
-
   "hbstore": {
     "categories": {
       "all": "All",
@@ -361,7 +353,6 @@
     },
     "noData": "No packages found"
   },
-
   "settings": {
     "welcome": "Thank you for using my <b>Remote Package Sender v2</b>!",
     "welcomeDetail": "Hope you like it so far what I've build and I would really appreciate any feedback and support.",
@@ -370,7 +361,6 @@
     "todo": "There are so many nice features that are on my todo (black)-list that are not done yet.",
     "future": "I'd like to invest more time into this Tool and provide you one of the best Tools ever."
   },
-
   "download": {
     "title": "Downloads",
     "rpi": {
@@ -412,7 +402,6 @@
       "desc": "If you would like to add your Homebrew App to the Downloads Area message me on Discord at"
     }
   },
-
   "messages": {
     "connection": {
       "ps4Accessible": "PS4 is accessible",
@@ -462,7 +451,6 @@
       "noBasePath": "No server base path given. Please Configure first."
     }
   },
-
   "errors": {
     "singleDpiStatusFailed": "{filename} singleDPI status failed",
     "singleDpiInstallError": "{filename} singleDPI install error",
@@ -473,7 +461,6 @@
     "invalidSingleDpiResponse": "Invalid singleDPI response",
     "ps5ConnectionFailed": "PS5 Connection failed"
   },
-
   "debug": {
     "checkHeartbeat": "Check Heartbeat",
     "startServer": "Start Server",
