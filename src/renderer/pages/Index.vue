@@ -205,7 +205,7 @@
                 <el-tag size="small" :type="$helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).color">
                   {{ $helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).label }}
                 </el-tag>
-                <i class="el-icon-time" style="color: #e6a23c; margin-left: 3px;" v-if="isBlockedByMissingBase(scope.row)"/>
+                <i class="el-icon-time base-blocked-icon" v-if="isBlockedByMissingBase(scope.row)"/>
               </span>
             </el-tooltip>
           </template>
@@ -956,7 +956,8 @@ export default {
     isBlockedByMissingBase(file) {
       const sfo = file.sfo || {}
       const category = String(sfo.CATEGORY || '').toLowerCase()
-      if (!['gp', 'ac'].includes(category)) return false
+      const { GP, AC, GD } = this.$helper.SFO_CATEGORIES
+      if (![GP, AC].includes(category)) return false
 
       const titleId = sfo.TITLE_ID || file.cusa
       if (!titleId) return false
@@ -964,7 +965,7 @@ export default {
       const baseGame = this.queueFiles.find(f => {
         const fSfo = f.sfo || {}
         return (fSfo.TITLE_ID || f.cusa) === titleId &&
-            String(fSfo.CATEGORY || '').toLowerCase() === 'gd'
+            String(fSfo.CATEGORY || '').toLowerCase() === GD
       })
 
       if (!baseGame) return false // Base not in queue — assume already on console
@@ -1362,6 +1363,11 @@ export default {
     border-radius: 3px;
     font-size: 11px;
     font-weight: 500;
+  }
+
+  .base-blocked-icon {
+    color: #e6a23c;
+    margin-left: 3px;
   }
 
   .sfo-subtitle {

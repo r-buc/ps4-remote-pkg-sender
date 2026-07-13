@@ -55,6 +55,14 @@ let helper = {
         return ''
     },
 
+    // SFO CATEGORY codes and their installation order (lower = install first):
+    //   gd  - Base game
+    //   gp  - Patch / update
+    //   ac  - Add-on / DLC
+    //   gda - Extra data
+    //   la  - Application / other
+    SFO_CATEGORIES: { GD: 'gd', GP: 'gp', AC: 'ac', GDA: 'gda', LA: 'la' },
+
     // Return the installation order weight for a SFO category (lower = install first)
     getSfoCategoryOrder(category=''){
         const order = { gd: 0, gp: 1, ac: 2, gda: 3, la: 4 }
@@ -95,12 +103,13 @@ let helper = {
 
     // Map SFO CATEGORY code to human-readable label and tag color
     getSfoCategoryLabel(category=''){
+        const { GD, GP, AC, GDA, LA } = this.SFO_CATEGORIES
         const map = {
-            'gd':  { label: 'Game', color: 'success' },
-            'gp':  { label: 'Patch', color: 'primary' },
-            'ac':  { label: 'DLC', color: 'warning' },
-            'gda': { label: 'Extra Data', color: 'info' },
-            'la':  { label: 'App', color: 'danger' },
+            [GD]:  { label: 'Game', color: 'success' },
+            [GP]:  { label: 'Patch', color: 'primary' },
+            [AC]:  { label: 'DLC', color: 'warning' },
+            [GDA]: { label: 'Extra Data', color: 'info' },
+            [LA]:  { label: 'App', color: 'danger' },
         }
 
         if(map[category])
@@ -118,11 +127,11 @@ let helper = {
         const data = file.data || {}
         const category = String(sfo.CATEGORY || data.CATEGORY || data.category || '').toLowerCase()
         const categoryAliases = {
-            gd: ['game', 'base game'],
-            gp: ['patch', 'update'],
-            ac: ['dlc', 'add-on', 'addon'],
-            gda: ['extra data'],
-            la: ['app', 'application'],
+            [this.SFO_CATEGORIES.GD]:  ['game', 'base game'],
+            [this.SFO_CATEGORIES.GP]:  ['patch', 'update'],
+            [this.SFO_CATEGORIES.AC]:  ['dlc', 'add-on', 'addon'],
+            [this.SFO_CATEGORIES.GDA]: ['extra data'],
+            [this.SFO_CATEGORIES.LA]:  ['app', 'application'],
         }
         const categoryLabel = this.getSfoCategoryLabel(category).label
         const fields = [
