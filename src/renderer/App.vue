@@ -3,6 +3,7 @@
 </template>
 <script>
 import './scss/app.scss';
+import 'element-ui/lib/theme-chalk/index.css';
 import { get } from 'vuex-pathify'
 const { remote, ipcRenderer, shell } = require('electron')
 const url = require('url')
