@@ -63,5 +63,4 @@ modules:
       - type: script
         dest-filename: run.sh
         commands:
-          # The executable name matches the lowercase `name` field produced by electron-builder for Linux.
-          - zypak-wrapper.sh /app/main/ps4remotepkgsenderv2 --ozone-platform=wayland --disable-features=Vulkan,VulkanFromANGLE,DefaultANGLEVulkan --use-gl=egl --enable-features=WaylandWindowDecorations --enable-logging "$@"
+          - zypak-wrapper.sh /app/main/PS4RemotePKGSenderV2 --enable-logging "$@"
