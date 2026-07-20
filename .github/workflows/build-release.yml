@@ -95,11 +95,11 @@ jobs:
           node-version: 24
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+      - name: Install flatpak-node-generator
+        run: pip install flatpak-node-generator
 
-      - name: Build Electron app
-        run: npm run build:linux:dir
+      - name: Generate Flatpak node sources
+        run: npm run flatpak:gen
 
       - name: Install Flatpak tooling
         run: sudo apt-get update && sudo apt-get install -y flatpak flatpak-builder

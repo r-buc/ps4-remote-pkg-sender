@@ -4,6 +4,8 @@ runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
 base-version: '25.08'
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node24
 command: run.sh
 separate-locales: false
 
@@ -17,13 +19,31 @@ finish-args:
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
   - --env=ELECTRON_TRASH=gio
 
+build-options:
+  append-path: /usr/lib/sdk/node24/bin
+  env:
+    NPM_CONFIG_LOGLEVEL: info
+
 modules:
   - name: ps4-remote-pkg-sender
     buildsystem: simple
+    build-options:
+      env:
+        XDG_CACHE_HOME: /run/build/ps4-remote-pkg-sender/flatpak-node/cache
+        npm_config_cache: /run/build/ps4-remote-pkg-sender/flatpak-node/npm-cache
+        npm_config_offline: 'true'
+        electron_config_cache: /run/build/ps4-remote-pkg-sender/flatpak-node/cache
+        ELECTRON_CACHE: /run/build/ps4-remote-pkg-sender/flatpak-node/cache/electron
+        ELECTRON_BUILDER_CACHE: /run/build/ps4-remote-pkg-sender/flatpak-node/cache/electron-builder
+        ELECTRON_BUILDER_OFFLINE: 'true'
     build-commands:
-      # The CI workflow builds release/linux-unpacked before invoking flatpak-builder.
-      # The type:dir source below includes that pre-built directory, so no npm build
-      # or network access is needed inside the sandbox.
+      # Strip non-Linux targets and set a dir-only Linux build so electron-builder
+      # doesn't try to download anything extra inside the offline sandbox.
+      - jq 'del(.build.win, .build.mac, .build.dmg, .build.publish, .repository) | .build.linux.target="dir"' package.json > package.json.tmp && mv package.json.tmp package.json
+      # Install all npm dependencies from the offline cache provided by flatpak-node-sources.json
+      - npm install --offline --legacy-peer-deps
+      # Build the Electron app (electron-vite + electron-builder --linux --dir)
+      - npm run build:linux:dir
       - cp -a release/linux-unpacked /app/main
       # Install the launcher wrapper
       - install -Dm755 -t /app/bin/ run.sh
@@ -36,6 +56,7 @@ modules:
     sources:
       - type: dir
         path: .
+      - flatpak-node-sources.json
       - type: script
         dest-filename: run.sh
         commands:
