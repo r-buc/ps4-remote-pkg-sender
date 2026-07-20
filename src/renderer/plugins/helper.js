@@ -55,14 +55,61 @@ let helper = {
         return ''
     },
 
+    // SFO CATEGORY codes and their installation order (lower = install first):
+    //   gd  - Base game
+    //   gp  - Patch / update
+    //   ac  - Add-on / DLC
+    //   gda - Extra data
+    //   la  - Application / other
+    SFO_CATEGORIES: { GD: 'gd', GP: 'gp', AC: 'ac', GDA: 'gda', LA: 'la' },
+
+    // Return the installation order weight for a SFO category (lower = install first)
+    getSfoCategoryOrder(category=''){
+        const order = { gd: 0, gp: 1, ac: 2, gda: 3, la: 4 }
+        return order[String(category).toLowerCase()] ?? 99
+    },
+
+    // Extract the primary Title ID from a queue file object
+    getTitleIdFromFile(file={}){
+        return (file.sfo && file.sfo.TITLE_ID) || file.cusa || null
+    },
+
+    // Group files by TITLE_ID and sort within each group (base → patch → DLC → others).
+    // Files with no TITLE_ID are appended at the end in their original order.
+    groupAndSortQueueFiles(files=[]){
+        const groups = new Map()
+        const noGroup = []
+
+        files.forEach(file => {
+            const titleId = this.getTitleIdFromFile(file)
+            if (!titleId) {
+                noGroup.push(file)
+                return
+            }
+            if (!groups.has(titleId)) groups.set(titleId, [])
+            groups.get(titleId).push(file)
+        })
+
+        groups.forEach(group => {
+            group.sort((a, b) => {
+                const catA = String((a.sfo && a.sfo.CATEGORY) || '').toLowerCase()
+                const catB = String((b.sfo && b.sfo.CATEGORY) || '').toLowerCase()
+                return this.getSfoCategoryOrder(catA) - this.getSfoCategoryOrder(catB)
+            })
+        })
+
+        return Array.from(groups.values()).flat().concat(noGroup)
+    },
+
     // Map SFO CATEGORY code to human-readable label and tag color
     getSfoCategoryLabel(category=''){
+        const { GD, GP, AC, GDA, LA } = this.SFO_CATEGORIES
         const map = {
-            'gd':  { label: 'Game', color: 'success' },
-            'gp':  { label: 'Patch', color: 'primary' },
-            'ac':  { label: 'DLC', color: 'warning' },
-            'gda': { label: 'Extra Data', color: 'info' },
-            'la':  { label: 'App', color: 'danger' },
+            [GD]:  { label: 'Game', color: 'success' },
+            [GP]:  { label: 'Patch', color: 'primary' },
+            [AC]:  { label: 'DLC', color: 'warning' },
+            [GDA]: { label: 'Extra Data', color: 'info' },
+            [LA]:  { label: 'App', color: 'danger' },
         }
 
         if(map[category])
@@ -80,11 +127,11 @@ let helper = {
         const data = file.data || {}
         const category = String(sfo.CATEGORY || data.CATEGORY || data.category || '').toLowerCase()
         const categoryAliases = {
-            gd: ['game', 'base game'],
-            gp: ['patch', 'update'],
-            ac: ['dlc', 'add-on', 'addon'],
-            gda: ['extra data'],
-            la: ['app', 'application'],
+            [this.SFO_CATEGORIES.GD]:  ['game', 'base game'],
+            [this.SFO_CATEGORIES.GP]:  ['patch', 'update'],
+            [this.SFO_CATEGORIES.AC]:  ['dlc', 'add-on', 'addon'],
+            [this.SFO_CATEGORIES.GDA]: ['extra data'],
+            [this.SFO_CATEGORIES.LA]:  ['app', 'application'],
         }
         const categoryLabel = this.getSfoCategoryLabel(category).label
         const fields = [
