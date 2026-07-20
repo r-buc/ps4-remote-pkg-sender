@@ -1,7 +1,6 @@
 import helperPlugin from './helper'
 import elementUiPlugin from './element-ui'
 import axiosPlugin from './axios'
-import i18nPlugin from './i18n'
 import ps4Plugin from './ps4'
 import ps4GoldhenPlugin from './ps4_goldhen'
 import ps5Plugin from './ps5'

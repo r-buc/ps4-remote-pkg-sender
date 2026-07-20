@@ -23,8 +23,8 @@ export async function loadMessages (locale) {
     }
   }
 
-  if (i18n.global.locale !== locale) {
-    i18n.global.locale = locale
+  if (i18n.global.locale.value !== locale) {
+    i18n.global.locale.value = locale
   }
 }
 

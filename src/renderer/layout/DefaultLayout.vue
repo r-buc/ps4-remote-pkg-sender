@@ -142,7 +142,7 @@ export default {
       window.addEventListener('drop', this.drop)
   },
 
-  unmounted(){
+  beforeUnmount(){
       window.removeEventListener('scroll', this.scroll)
       window.removeEventListener('dragover', this.dragover)
       window.removeEventListener('drop', this.drop)
