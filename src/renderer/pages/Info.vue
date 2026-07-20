@@ -9,7 +9,7 @@
     <h2>Information</h2>
     app: {{ $root.versions.app }} <br>
     electron: {{ $root.versions.electron }} <br>
-    electron-webpack: {{ $root.versions.electronWebpack }} <br>
+    electron-vite: {{ $root.versions.electronVite }} <br>
     platform: {{ platform }} <br>
     <br>
     runtime: {{ time }} sec's since start <br>
@@ -50,7 +50,7 @@
 
 <script>
 import { get } from 'vuex-pathify'
-import os from 'os'
+const os = require('os')
 
 export default {
   name: 'Info',
