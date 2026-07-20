@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
+import contextlib
 import importlib.metadata
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -13,6 +15,8 @@ MIN_COMPLETENESS_RATIO = 0.75
 ROOT = Path(__file__).resolve().parent.parent
 LOCKFILE = ROOT / "package-lock.json"
 OUTPUT = ROOT / "flatpak-node-sources.json"
+NODE_MODULES = ROOT / "node_modules"
+NODE_MODULES_BACKUP = ROOT / "node_modules_flatpak_gen_backup"
 
 
 def ensure_generator() -> None:
@@ -39,20 +43,38 @@ def ensure_generator() -> None:
     )
 
 
+@contextlib.contextmanager
+def without_node_modules():
+    """
+    flatpak-node-generator must run with node_modules absent; see:
+    https://github.com/flatpak/flatpak-builder-tools/blob/master/node/README.md
+    Temporarily rename the directory and restore it afterwards.
+    """
+    renamed = NODE_MODULES.exists()
+    if renamed:
+        NODE_MODULES.rename(NODE_MODULES_BACKUP)
+    try:
+        yield
+    finally:
+        if renamed and NODE_MODULES_BACKUP.exists():
+            NODE_MODULES_BACKUP.rename(NODE_MODULES)
+
+
 def generate_sources() -> None:
-    subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "flatpak_node_generator",
-            "npm",
-            str(LOCKFILE),
-            "-o",
-            str(OUTPUT),
-        ],
-        cwd=ROOT,
-        check=True,
-    )
+    with without_node_modules():
+        subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "flatpak_node_generator",
+                "npm",
+                str(LOCKFILE),
+                "-o",
+                str(OUTPUT),
+            ],
+            cwd=ROOT,
+            check=True,
+        )
 
 
 def validate_sources() -> None:
