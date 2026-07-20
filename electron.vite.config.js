@@ -19,7 +19,7 @@ export default defineConfig({
       preprocessorOptions: {
         scss: {
           quietDeps: true,
-          silenceDeprecations: ['import', 'global-builtin', 'if-function'],
+          silenceDeprecations: ['import', 'global-builtin'],
         },
       },
     },
