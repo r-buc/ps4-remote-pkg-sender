@@ -8,15 +8,15 @@ import tray from './tray'
 
 // prepatch 
 console.log("Plattform Check " + process.platform)
-// Force Wayland GPU patches to prevent white screens
-if (process.platform === "linux") {
-  console.log("Apply --no-sandbox to commandline to fix Linux (debian) graphical issues")
-  
-  app.commandLine.appendSwitch("no-sandbox");
-  app.commandLine.appendSwitch("disable-gpu");
-  app.commandLine.appendSwitch("disable-software-rasterizer");
-  app.disableHardwareAcceleration();
-}
+// NOTE: previously this forced --no-sandbox/--disable-gpu/
+// --disable-software-rasterizer/disableHardwareAcceleration on Linux to work
+// around an earlier black-screen issue. That combination turned out to leave
+// no usable rendering backend at all - it broke DevTools (openDevTools()
+// silently failed to actually open) and broke painting of certain CSS
+// (transform + negative z-index + absolute position, e.g. el-select's
+// placeholder text rendered in the DOM but never appeared on screen).
+// Confirmed removing these switches fixes both without reintroducing black
+// screens, so they've been dropped.
 
 // set vars
 const isDevelopment = process.env.NODE_ENV !== 'production'

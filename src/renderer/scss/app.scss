@@ -6,3 +6,31 @@
 @use 'darkmode';
 @use 'pureblack';
 @use 'active';
+
+// el-select relies on its containing element having a resolvable width -
+// its internal text is rendered via position:absolute (an upstream trick to
+// keep it behind an invisible width-calculator input), which means it does
+// NOT contribute to any ancestor's shrink-to-fit/content-based sizing.
+// Confirmed via DevTools measurements: inside this app's inline forms
+// (<el-form :inline="true">), .el-form-item is inline-block (shrink-to-fit)
+// and .el-select's own `width: 100%` resolves against that indeterminate
+// parent, collapsing the whole control down to just its icon (~34px)
+// because the (invisible-to-sizing) selected text is the only thing that
+// would otherwise justify a wider box. This matches Element Plus's own
+// documented guidance that el-select needs an explicit width when it isn't
+// inside a container that already has a definite width (very commonly hit
+// inside inline forms) - not a library bug, just a missing width here.
+//
+// A fixed min-width would fix the collapse but forces every select to the
+// same width regardless of content. Putting the text back into normal flow
+// (position:static instead of absolute) instead restores proper
+// shrink-to-fit sizing driven by each select's own selected value, matching
+// the original intent of auto-sizing selects to their content. None of our
+// selects are filterable/multiple, so the width-calculator behavior this
+// positioning trick supports isn't needed here anyway.
+.el-select__placeholder {
+    position: static !important;
+    transform: none !important;
+    z-index: auto !important;
+}
+
