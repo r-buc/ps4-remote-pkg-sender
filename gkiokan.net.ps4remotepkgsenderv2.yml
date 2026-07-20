@@ -18,7 +18,6 @@ finish-args:
   - --share=network
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons
   - --env=ELECTRON_TRASH=gio
-
 build-options:
   append-path: /usr/lib/sdk/node24/bin
   env:
@@ -36,13 +35,15 @@ modules:
         ELECTRON_CACHE: /run/build/ps4-remote-pkg-sender/flatpak-node/cache/electron
         ELECTRON_BUILDER_CACHE: /run/build/ps4-remote-pkg-sender/flatpak-node/cache/electron-builder
         ELECTRON_BUILDER_OFFLINE: 'true'
+        DEBUG: '*'
     build-commands:
-      # Strip non-Linux targets and set a dir-only Linux build so electron-builder
-      # doesn't try to download anything extra inside the offline sandbox.
-      - jq 'del(.build.win, .build.mac, .build.dmg, .build.publish, .repository) | .build.linux.target="dir"' package.json > package.json.tmp && mv package.json.tmp package.json
-      # Install all npm dependencies from the offline cache provided by flatpak-node-sources.json
+      # Extract the cached electron zip manually to bypass @electron/get checksum downloads
+      - mkdir -p electron-dist
+      - find flatpak-node/cache/electron -name "electron-v*-linux-x64.zip" -exec unzip -q {} -d electron-dist \;
+      # Strip unused targets, repository metadata, and point to the manual electronDist
+      - jq 'del(.build.win, .build.mac, .build.dmg, .build.publish, .repository) | .build.linux.target="dir" | .build.electronDist="electron-dist"' package.json > package.json.tmp && mv package.json.tmp package.json
+      # Build the app from source
       - npm install --offline --legacy-peer-deps
-      # Build the Electron app (electron-vite + electron-builder --linux --dir)
       - npm run build:linux:dir
       - cp -a release/linux-unpacked /app/main
       # Install the launcher wrapper
@@ -54,10 +55,13 @@ modules:
       # Install AppStream metadata
       - install -Dm644 gkiokan.net.ps4remotepkgsenderv2.metainfo.xml /app/share/metainfo/gkiokan.net.ps4remotepkgsenderv2.metainfo.xml
     sources:
+      # The CI workflow creates release/linux-unpacked before invoking flatpak-builder,
+      # and this repository source includes that prebuilt app directory for packaging.
       - type: dir
         path: .
       - flatpak-node-sources.json
       - type: script
         dest-filename: run.sh
         commands:
+          # The executable name matches the lowercase `name` field produced by electron-builder for Linux.
           - zypak-wrapper.sh /app/main/ps4remotepkgsenderv2 --ozone-platform=wayland --disable-features=Vulkan,VulkanFromANGLE,DefaultANGLEVulkan --use-gl=egl --enable-features=WaylandWindowDecorations --enable-logging "$@"
