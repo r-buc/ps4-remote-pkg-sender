@@ -36,12 +36,12 @@ for (let attempt = 0; attempt < 5 && store === undefined; attempt++) {
     }
     catch (e) {
         lastError = e
-        console.error('[Store] createStore() failed on attempt ' + (attempt + 1), e)
+        console.error('[Store] createStoreInstance() failed on attempt ' + (attempt + 1), e)
     }
 }
 
 if (store === undefined) {
-    throw lastError || new Error('[Store] createStore() failed and produced no store')
+    throw lastError || new Error('[Store] createStoreInstance() failed and produced no store')
 }
 
 export default store

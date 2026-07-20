@@ -19,7 +19,7 @@
               </el-form-item>
           </el-col>
           <el-col :span="4">
-              <el-button size="small" icon="fa fa-server" style="width: calc(100% - 40px)" @click="$root.openServer()"> {{ $t('config.server.serverButton') }} </el-button>
+              <el-button size="small" style="width: calc(100% - 40px)" @click="$root.openServer()"><i class="fa fa-server"/> {{ $t('config.server.serverButton') }} </el-button>
           </el-col>
       </el-row>
 

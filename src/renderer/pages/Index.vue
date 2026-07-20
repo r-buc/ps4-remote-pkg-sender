@@ -252,20 +252,20 @@
 
       <el-table-column :label="$t('common.table.operation')" width="150" align="right">
         <template #default="scope">
-          <el-button circle size="small" icon="fa fa-minus" @click="removeFromQueue(scope.row)"/>
+          <el-button circle size="small" @click="removeFromQueue(scope.row)"><i class="fa fa-minus"/></el-button>
 
-          <el-button circle size="small" icon="fa fa-info" @click="info(scope.row)" v-if="false"></el-button>
-          <el-button circle size="small" icon="fa fa-stop" @click="stop(scope.row)" v-if="false"></el-button>
-          <el-button circle size="small" icon="fa fa-play" v-if="scope.row.status != 'installing' && !(isSingleDPI && scope.row.status == 'error')" @click="start(scope.row)"></el-button>
+          <el-button circle size="small" @click="info(scope.row)" v-if="false"><i class="fa fa-info"/></el-button>
+          <el-button circle size="small" @click="stop(scope.row)" v-if="false"><i class="fa fa-stop"/></el-button>
+          <el-button circle size="small" v-if="scope.row.status != 'installing' && !(isSingleDPI && scope.row.status == 'error')" @click="start(scope.row)"><i class="fa fa-play"/></el-button>
           <el-button circle size="small" type="danger" icon="el-icon-refresh-right"
               :title="$t('queue.operation.retryFailed')"
               v-if="isSingleDPI && scope.row.status == 'error'"
               @click="retryFailedInstall(scope.row)"></el-button>
-          <el-button circle size="small" icon="fa fa-pause" v-if="scope.row.status == 'installing'" @click="pause(scope.row)"></el-button>
+          <el-button circle size="small" v-if="scope.row.status == 'installing'" @click="pause(scope.row)"><i class="fa fa-pause"/></el-button>
 
-          <el-button circle size="small" icon="fab fa-playstation" @click="isInstalled(scope.row)"/>
+          <el-button circle size="small" @click="isInstalled(scope.row)"><i class="fab fa-playstation"/></el-button>
 
-          <el-button circle size="small" icon="fa fa-check" v-if="scope.row.status == 'finished' && scope.row.status == 'serving' && scope.row.status == 'installing'"/>
+          <el-button circle size="small" v-if="scope.row.status == 'finished' && scope.row.status == 'serving' && scope.row.status == 'installing'"><i class="fa fa-check"/></el-button>
         </template>
       </el-table-column>
     </el-table>

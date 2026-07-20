@@ -158,9 +158,9 @@
 
       <el-table-column :label="$t('common.table.operation')" width="100" align="right">
         <template #default="scope">
-          <el-button circle size="small" icon="fa fa-minus" @click="removeFromQueue(scope.row)" v-if="scope.row.status == 'in queue'"/>
+          <el-button circle size="small" @click="removeFromQueue(scope.row)" v-if="scope.row.status == 'in queue'"><i class="fa fa-minus"/></el-button>
           <el-button circle size="small" icon="el-icon-plus" @click="addToQueue(scope.row)" v-if="scope.row.status != 'in queue'"/>
-          <el-button circle size="small" icon="fa fa-cloud-download-alt" @click="check(scope.row.url)" v-if="tab == 'server'"/>
+          <el-button circle size="small" @click="check(scope.row.url)" v-if="tab == 'server'"><i class="fa fa-cloud-download-alt"/></el-button>
           <el-button circle size="small" icon="el-icon-delete" @click="removeFileFromDragged(scope.row)" v-if="tab == 'dragged'"/>
         </template>
       </el-table-column>
