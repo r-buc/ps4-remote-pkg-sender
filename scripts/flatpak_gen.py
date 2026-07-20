@@ -93,10 +93,19 @@ def validate_sources() -> None:
     }
 
     min_expected = int(package_count * MIN_COMPLETENESS_RATIO)
+
+    electron_version = (
+        lockfile.get("packages", {})
+        .get("node_modules/electron", {})
+        .get("version")
+    )
+    if not electron_version:
+        raise SystemExit("Could not determine Electron version from package-lock.json")
+
     required_electron_suffixes = (
-        "electron-v43.1.0-linux-arm64.zip",
-        "electron-v43.1.0-linux-armv7l.zip",
-        "electron-v43.1.0-linux-x64.zip",
+        f"electron-v{electron_version}-linux-arm64.zip",
+        f"electron-v{electron_version}-linux-armv7l.zip",
+        f"electron-v{electron_version}-linux-x64.zip",
     )
 
     missing_electron_files = [
