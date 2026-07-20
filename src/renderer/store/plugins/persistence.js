@@ -1,3 +1,5 @@
+import debounce from 'lodash/debounce'
+
 const STORAGE_KEY = 'ps4-rps-store'
 
 // Only persist modules whose state should survive page reloads/restarts.
@@ -23,8 +25,8 @@ export function createLocalStoragePlugin() {
       console.warn('[Store] Failed to rehydrate state from localStorage', e)
     }
 
-    // Persist selected modules after each mutation
-    store.subscribe((_mutation, state) => {
+    // Persist selected modules after mutations; debounced to avoid excessive writes.
+    const persist = debounce((state) => {
       try {
         const toSave = {}
         PERSISTED_MODULES.forEach(mod => {
@@ -34,6 +36,8 @@ export function createLocalStoragePlugin() {
       } catch (e) {
         console.warn('[Store] Failed to persist state to localStorage', e)
       }
-    })
+    }, 500)
+
+    store.subscribe((_mutation, state) => persist(state))
   }
 }
