@@ -68,10 +68,8 @@ export default {
   },
 
   beforeUnmount() {
-      if (this.heartbeatTimer !== null) {
-          window.clearInterval(this.heartbeatTimer)
-          this.heartbeatTimer = null
-      }
+      window.clearInterval(this.heartbeatTimer)
+      this.heartbeatTimer = null
   },
 
   errorCaptured(err, vm, info) {
