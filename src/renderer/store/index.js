@@ -1,14 +1,6 @@
 import { createStore } from 'vuex'
 import pathify from './pathify'
-
-// NOTE: createPersistedState is intentionally NOT used here. vuex-electron's
-// persisted-state plugin relies on the "electron-store" package, whose constructor
-// unconditionally calls (electron.app || electron.remote.app).getPath('userData').
-// In the renderer process `app` is undefined and `remote` no longer exists (removed
-// in modern Electron), so this always threw a TypeError and prevented the store
-// (and thus the whole Vue app) from ever mounting - this was the root cause of the
-// original black/white screen. TODO: reintroduce persistence via a renderer-safe
-// mechanism (e.g. IPC to a main-process store, or localStorage).
+import { createLocalStoragePlugin } from './plugins/persistence'
 
 // Load store modules dynamically.
 const modulesList = import.meta.glob('./modules/*.js', { eager: true })
@@ -29,7 +21,8 @@ function createStoreInstance(){
     return createStore({
         plugins: [
             pathify.plugin,
-        ], // createPersistedState omitted, see note above
+            createLocalStoragePlugin(),
+        ],
         modules
     })
 }

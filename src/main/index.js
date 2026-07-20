@@ -92,12 +92,6 @@ function createPS4Window(){
   windows.ps4 = window
 }
 
-function hearthbeat(){
-  setInterval( () => {
-    // timer tick – state is managed in the renderer process
-  }, 1000)
-}
-
 function registerChannel(){
     ipcMain.on('server', (event, data) => windows.server.webContents.send('server', data) )
     ipcMain.on('server-show', () => windows.server.show() )

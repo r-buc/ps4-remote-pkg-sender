@@ -14,9 +14,7 @@ export default {
   install(app) {
     componentEntries.forEach(([name, component]) => {
       const Component = component.default || component
-      if (Component.name) {
-        app.component(Component.name, Component)
-      }
+      app.component(Component.name || name, Component)
     })
   }
 }
