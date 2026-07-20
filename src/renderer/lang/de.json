@@ -249,6 +249,7 @@
       "version": "Version",
       "category": "Kategorie",
       "contentId": "Inhalts-ID",
+      "parentalLevel": "Altersfreigabe",
       "fileName": "Dateiname",
       "patchedName": "Geänderter Name",
       "path": "Pfad",

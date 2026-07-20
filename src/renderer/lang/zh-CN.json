@@ -249,6 +249,7 @@
       "version": "版本",
       "category": "类别",
       "contentId": "内容 ID",
+      "parentalLevel": "家长控制等级",
       "fileName": "文件名",
       "patchedName": "修补后的名称",
       "path": "路径",

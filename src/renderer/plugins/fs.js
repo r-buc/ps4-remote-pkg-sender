@@ -307,7 +307,7 @@ let o = {
     },
 
     async getItemSFO(item, keys=[]){
-        let sfoKeys = ['APP_TYPE', 'APP_VER', 'ATTRIBUTE', 'ATTRIBUTE2', 'CATEGORY', 'CONTENT_ID', 'PUBTOOLINFO', 'PUBTOOLMINVER', 'PUBTOOLVER', 'SYSTEM_VER', 'TITLE', 'TITLE_ID', 'VERSION']
+        let sfoKeys = ['APP_TYPE', 'APP_VER', 'ATTRIBUTE', 'ATTRIBUTE2', 'CATEGORY', 'CONTENT_ID', 'PARENTAL_LEVEL', 'PUBTOOLINFO', 'PUBTOOLMINVER', 'PUBTOOLVER', 'SYSTEM_VER', 'TITLE', 'TITLE_ID', 'VERSION']
         let sfo = { readSFOHeader: true }
 
         try {

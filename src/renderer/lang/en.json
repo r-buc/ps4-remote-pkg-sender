@@ -249,6 +249,7 @@
       "version": "Version",
       "category": "Category",
       "contentId": "Content ID",
+      "parentalLevel": "Parental Level",
       "fileName": "File Name",
       "patchedName": "Patched Name",
       "path": "Path",

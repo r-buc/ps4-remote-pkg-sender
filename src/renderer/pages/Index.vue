@@ -124,6 +124,10 @@
                 <span class="expand-label">{{ $t('queue.expand.contentId') }}</span>
                 <span class="expand-value">{{ scope.row.sfo.CONTENT_ID }}</span>
               </div>
+              <div class="expand-item" v-if="scope.row.sfo.PARENTAL_LEVEL">
+                <span class="expand-label">{{ $t('queue.expand.parentalLevel') }}</span>
+                <span class="expand-value">{{ scope.row.sfo.PARENTAL_LEVEL }}</span>
+              </div>
             </div>
           </div>
 
