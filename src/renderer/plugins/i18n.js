@@ -1,6 +1,8 @@
 import { createI18n } from 'vue-i18n'
 import en from '@/lang/en.json'
 
+// legacy: true keeps vue-i18n in Options API mode (this.$t / $tc / etc.)
+// across the entire codebase, avoiding a large rewrite of all component templates.
 const i18n = createI18n({
   legacy: true,
   locale: 'en',

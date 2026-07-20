@@ -6,6 +6,7 @@
 */
 
 const modulesList = import.meta.glob('./*.vue', { eager: true })
+// Strip leading './' and trailing '.vue' to get the bare filename as a fallback key
 const componentEntries = Object.keys(modulesList)
   .map(file => [file.replace(/^\.\//, '').replace(/\.vue$/, ''), modulesList[file]])
 
