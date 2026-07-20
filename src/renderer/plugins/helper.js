@@ -73,7 +73,14 @@ let helper = {
         return (file.sfo && file.sfo.TITLE_ID) || file.cusa || null
     },
 
+    // Extract a human-readable title for a file, used to sort groups alphabetically
+    getGroupTitleName(file={}){
+        const sfo = file.sfo || {}
+        return String(file.title || sfo.TITLE || file.name || '')
+    },
+
     // Group files by TITLE_ID and sort within each group (base → patch → DLC → others).
+    // Groups are ordered alphabetically by the title of their first file.
     // Files with no TITLE_ID are appended at the end in their original order.
     groupAndSortQueueFiles(files=[]){
         const groups = new Map()
@@ -97,7 +104,13 @@ let helper = {
             })
         })
 
-        return Array.from(groups.values()).flat().concat(noGroup)
+        const sortedGroups = Array.from(groups.values()).sort((groupA, groupB) => {
+            return this.getGroupTitleName(groupA[0]).localeCompare(
+                this.getGroupTitleName(groupB[0]), undefined, { sensitivity: 'base' }
+            )
+        })
+
+        return sortedGroups.flat().concat(noGroup)
     },
 
     // Map SFO CATEGORY code to human-readable label and tag color

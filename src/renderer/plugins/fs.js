@@ -49,11 +49,23 @@ let o = {
         console.log("Loading Files from Subdirectory", scan_subdir)
         console.log("Loading Directory files in ", folder)
 
-        let files = (await getFiles(folder, scan_subdir))
+        let items = (await getFiles(folder, scan_subdir))
             .filter( file => this.isPKG(file) )
-            .map( item => this.createItem(item, folder) )
 
-        files = await Promise.all(files)
+        // Use allSettled instead of all: a single unreadable/corrupt PKG
+        // (e.g. lstatSync failing, or a SFO parsing error) must not abort
+        // the whole scan and leave serverFiles/servingFiles empty.
+        let results = await Promise.allSettled(items.map( item => this.createItem(item, folder) ))
+
+        let files = results
+            .filter( result => {
+                if(result.status === 'rejected'){
+                    console.error("::fs | Failed to read file, skipping it.", result.reason)
+                    return false
+                }
+                return !!result.value
+            })
+            .map( result => result.value )
 
         console.log("Found files " + files.length)
 

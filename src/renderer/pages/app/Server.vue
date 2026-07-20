@@ -330,7 +330,7 @@ export default {
             try {
                 let s = await getPs4PkgInfo(file.path, { generateBase64Icon: true })
                     .catch( e => {
-                        console.error("Error in PKG Extraction: "+ e + '; File: ' + fileName)
+                        console.error("Error in PKG Extraction: "+ e + '; File: ' + file.name)
                         throw e
                     })            
 
