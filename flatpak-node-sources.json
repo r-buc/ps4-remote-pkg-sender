@@ -1136,5 +1136,116 @@
             "FLATPAK_BUILDER_BUILDDIR=$PWD flatpak-node/patch-all.sh",
             "bash flatpak-node/setup_sdk_node_headers.sh"
         ]
+    },
+    {
+        "type": "file",
+        "url": "https://github.com/electron/electron/releases/download/v43.1.0/SHASUMS256.txt",
+        "sha256": "5750c4c4964f9febf50a03a69a54b2a671e0a6520c3ea6b4500081d32cf53f13",
+        "dest-filename": "SHASUMS256.txt-43.1.0",
+        "dest": "flatpak-node/cache/electron"
+    },
+    {
+        "type": "file",
+        "url": "https://github.com/electron/electron/releases/download/v43.1.0/electron-v43.1.0-linux-arm64.zip",
+        "sha256": "78799ae4fdc7969acb152aa0f33f39bd5eaca2de3eafe817a13487b872abe43c",
+        "dest-filename": "electron-v43.1.0-linux-arm64.zip",
+        "dest": "flatpak-node/cache/electron",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://github.com/electron/electron/releases/download/v43.1.0/electron-v43.1.0-linux-armv7l.zip",
+        "sha256": "1f32ac165dd1d01f1dcb8bfb881503369c7b739dd292034ef61e2ea75b852a2c",
+        "dest-filename": "electron-v43.1.0-linux-armv7l.zip",
+        "dest": "flatpak-node/cache/electron",
+        "only-arches": [
+            "arm"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://github.com/electron/electron/releases/download/v43.1.0/electron-v43.1.0-linux-x64.zip",
+        "sha256": "be56b5b8451bda585b56e6a6a67757da2cb7ead59f036b6000431a51c0e0c79b",
+        "dest-filename": "electron-v43.1.0-linux-x64.zip",
+        "dest": "flatpak-node/cache/electron",
+        "only-arches": [
+            "x86_64"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "mkdir -p \"a791fa12f2db1c58c084ec41c5caf1ac518de84788ba857a6bebef2fe9349ed3\"",
+            "ln -s \"../SHASUMS256.txt-43.1.0\" \"a791fa12f2db1c58c084ec41c5caf1ac518de84788ba857a6bebef2fe9349ed3/SHASUMS256.txt\""
+        ],
+        "dest": "flatpak-node/cache/electron"
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "mkdir -p \"a791fa12f2db1c58c084ec41c5caf1ac518de84788ba857a6bebef2fe9349ed3\"",
+            "ln -s \"../electron-v43.1.0-linux-arm64.zip\" \"a791fa12f2db1c58c084ec41c5caf1ac518de84788ba857a6bebef2fe9349ed3/electron-v43.1.0-linux-arm64.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "mkdir -p \"a791fa12f2db1c58c084ec41c5caf1ac518de84788ba857a6bebef2fe9349ed3\"",
+            "ln -s \"../electron-v43.1.0-linux-armv7l.zip\" \"a791fa12f2db1c58c084ec41c5caf1ac518de84788ba857a6bebef2fe9349ed3/electron-v43.1.0-linux-armv7l.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron",
+        "only-arches": [
+            "arm"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "mkdir -p \"a791fa12f2db1c58c084ec41c5caf1ac518de84788ba857a6bebef2fe9349ed3\"",
+            "ln -s \"../electron-v43.1.0-linux-x64.zip\" \"a791fa12f2db1c58c084ec41c5caf1ac518de84788ba857a6bebef2fe9349ed3/electron-v43.1.0-linux-x64.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron",
+        "only-arches": [
+            "x86_64"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "mkdir -p \"httpsgithub.comelectronelectronreleasesdownloadv43.1.0electron-v43.1.0-linux-arm64.zip\"",
+            "ln -s \"../electron-v43.1.0-linux-arm64.zip\" \"httpsgithub.comelectronelectronreleasesdownloadv43.1.0electron-v43.1.0-linux-arm64.zip/electron-v43.1.0-linux-arm64.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "mkdir -p \"httpsgithub.comelectronelectronreleasesdownloadv43.1.0electron-v43.1.0-linux-armv7l.zip\"",
+            "ln -s \"../electron-v43.1.0-linux-armv7l.zip\" \"httpsgithub.comelectronelectronreleasesdownloadv43.1.0electron-v43.1.0-linux-armv7l.zip/electron-v43.1.0-linux-armv7l.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron",
+        "only-arches": [
+            "arm"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "mkdir -p \"httpsgithub.comelectronelectronreleasesdownloadv43.1.0electron-v43.1.0-linux-x64.zip\"",
+            "ln -s \"../electron-v43.1.0-linux-x64.zip\" \"httpsgithub.comelectronelectronreleasesdownloadv43.1.0electron-v43.1.0-linux-x64.zip/electron-v43.1.0-linux-x64.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron",
+        "only-arches": [
+            "x86_64"
+        ]
     }
 ]
