@@ -39,7 +39,7 @@
 
     <el-divider />
 
-    <el-button size="mini" @click="crash" v-if="false"> Crash it! </el-button>
+    <el-button size="small" @click="crash" v-if="false"> Crash it! </el-button>
 
     <template v-if="debug">
       <pre>{{ ps4 }}</pre>

@@ -1,21 +1,21 @@
 <template>
-<el-dialog title="Add file by URL" :visible.sync="show">
+<el-dialog title="Add file by URL" v-model="show">
 
     <el-form :inline="true" label-width="150px" label-position="left">
         <el-form-item label="Name">
-          <el-input size="mini" v-model="form.name" autocomplete="off"></el-input>
+          <el-input size="small" v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="CUSA">
-          <el-input size="mini" v-model="form.cusa" autocomplete="off"></el-input>
+          <el-input size="small" v-model="form.cusa" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="URL">
-          <el-input size="mini" v-model="form.url" autocomplete="off"></el-input>
+          <el-input size="small" v-model="form.url" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="Type">
-          <el-select size="mini" v-model="form.region" placeholder="Type">
+          <el-select size="small" v-model="form.region" placeholder="Type">
             <el-option label="Game" value="game"></el-option>
             <el-option label="Update" value="update"></el-option>
             <el-option label="Patch" value="patch"></el-option>
@@ -28,10 +28,12 @@
         </el-form-item>
     </el-form>
 
-    <span slot="footer" class="dialog-footer">
-      <el-button size="mini" @click="hide">Cancel</el-button>
-      <el-button size="mini" type="primary" @click="add">Add</el-button>
-    </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button size="small" @click="hide">Cancel</el-button>
+        <el-button size="small" type="primary" @click="add">Add</el-button>
+      </span>
+    </template>
 
 </el-dialog>
 </template>

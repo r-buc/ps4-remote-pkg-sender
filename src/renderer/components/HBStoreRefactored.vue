@@ -22,7 +22,7 @@
                 <el-button size="small" :type="isOrder('downloads')" @click="setOrder('downloads')"> {{ $t('hbstore.order.popular') }} </el-button>
             </el-button-group>
 
-            <el-input v-model="search" size="small" :placeholder="$t('common.placeholder.search')" prefix-icon="fas fa-search" style="width: 200px"/>
+            <el-input v-model="search" size="small" :placeholder="$t('common.placeholder.search')" style="width: 200px"><template #prefix><i class="fas fa-search" /></template></el-input>
         </div>
     </el-col>
   </el-row>
@@ -31,7 +31,7 @@
   <div v-if="view == 'table'">
       <el-table :data="packages" class="file" :empty-text="$t('hbstore.noData')">
           <el-table-column type="expand">
-              <template slot-scope="scope">
+              <template #default="scope">
                   <el-tag size="small" type="info" style="margin-bottom: 5px"> {{ $t('hbstore.expand.reviewStars') }}: {{ scope.row.data.average_rating }} </el-tag>
                   <el-tag size="small" type="info" style="margin-bottom: 5px"> {{ $t('hbstore.expand.author') }}: {{ scope.row.data.author }} </el-tag>
                   <el-tag size="small" type="info" style="margin-bottom: 5px" :type="$helper.getAppStoreType(scope.row.data.type)"> {{ $t('hbstore.expand.type') }}: {{ scope.row.data.type }} </el-tag>
@@ -56,13 +56,13 @@
           </el-table-column>
 
           <el-table-column :label="$t('common.table.cover')" width="100">
-              <template slot-scope="scope">
+              <template #default="scope">
                   <div class='image' :style="{ backgroundImage: 'url('+scope.row.data.image+')' }" />
               </template>
           </el-table-column>
 
           <el-table-column prop="name" :label="$t('common.table.name')">
-              <template slot-scope="scope">
+              <template #default="scope">
                   {{ scope.row.name }} <small>(v{{ scope.row.data.version}})</small>
                   <el-tag size="small" :type="$helper.getAppStoreType(scope.row.data.type)" style="margin-left: 10px; margin-bottom: 3px;">{{ scope.row.data.type }}</el-tag>
                   <el-tag size="small" style="margin-left: 10px; margin-bottom: 3px; cursor: pointer;" v-if="scope.row.data.file_ps5" @click="check(scope.row.data.file_ps5)"> {{ $t('hbstore.download') }} </el-tag>
@@ -73,25 +73,25 @@
           </el-table-column>
 
           <el-table-column prop="cusa" :label="$t('common.table.titleId')" width="110" align="center">
-              <template slot-scope="scope">
+              <template #default="scope">
                   <small style="font-size:12px">{{ scope.row.cusa }}</small>
               </template>
           </el-table-column>
 
           <el-table-column prop="status" :label="$t('common.table.type')" width="120" align="center">
-            <template slot-scope="scope">
+            <template #default="scope">
                 <el-tag size="small" plain :type="$helper.getFileStatus(scope.row.status)">{{ $t('queue.status.' + scope.row.status) || scope.row.status }}</el-tag>
             </template>
           </el-table-column>
 
           <el-table-column prop="size" :label="$t('common.table.size')" width="120" align="right">
-            <template slot-scope="scope">
+            <template #default="scope">
                 <el-tag size="small" plain :type="$helper.getFileSizeType(scope.row.size)">{{ scope.row.size }}</el-tag>
             </template>
           </el-table-column>
 
           <el-table-column :label="$t('common.table.operation')" width="150" align="right">
-              <template slot-scope="scope">
+              <template #default="scope">
                   <el-button circle size="small" icon="fa fa-minus" @click="removeFromQueue(scope.row)" v-if="scope.row.status == 'in queue'" />
                   <el-button circle size="small" icon="el-icon-plus" @click="addToQueue(scope.row)" v-if="scope.row.status != 'in queue'" />
                   <el-button circle size="small" icon="fa fa-cloud-download-alt" @click="check(scope.row.url)" />

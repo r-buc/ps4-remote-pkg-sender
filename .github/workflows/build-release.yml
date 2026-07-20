@@ -27,7 +27,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build Windows x64 release artifacts
         run: npm run build:win:x64 -- --publish never
@@ -63,7 +63,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build Linux deb artifact
         run: npm run build:linux:deb -- --publish never

@@ -1,5 +1,5 @@
 import { make } from 'vuex-pathify'
-import fs from './../../plugins/fs.js'
+import { fs } from './../../plugins/fs.js'
 
 export const state = {
     files: [],

@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import axios from 'axios'
 import JSON5 from 'json5'
 
@@ -46,7 +45,7 @@ axios.interceptors.response.use(response =>
 
     if(message.includes('timeout of') !== false){
         return Promise.reject({
-            response: { message: 'Timeout on Request' },
+            response: { message: 'Timeout on Request' },
             status: 4408,
         })
     }
@@ -60,6 +59,10 @@ axios.interceptors.response.use(response =>
     return Promise.reject(e)
 })
 
-Vue.prototype.$axios = axios
+export default {
+  install(app) {
+    app.config.globalProperties.$axios = axios
+  }
+}
 
-export default axios
+export { axios }

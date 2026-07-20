@@ -3,7 +3,6 @@
 </template>
 <script>
 import './scss/app.scss';
-import 'element-ui/lib/theme-chalk/index.css';
 import { get } from 'vuex-pathify'
 const { remote, ipcRenderer, shell } = require('electron')
 const url = require('url')
@@ -26,7 +25,8 @@ export default {
     rpsv2: {
         api: null,
         id: null,
-    }
+    },
+    heartbeatTimer: null,
   }},
 
   computed: {
@@ -61,7 +61,15 @@ export default {
   mounted(){
       this.checkSerial()
       this.$store.dispatch('app/started')
+      this.heartbeatTimer = window.setInterval(() => {
+          this.$store.dispatch('app/addTime')
+      }, 1000)
       this.registerChannel()
+  },
+
+  beforeUnmount() {
+      window.clearInterval(this.heartbeatTimer)
+      this.heartbeatTimer = null
   },
 
   errorCaptured(err, vm, info) {

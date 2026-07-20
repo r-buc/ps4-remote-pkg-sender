@@ -58,10 +58,8 @@
     Game=6, AC=7, Patch=8, License=9
 */
 
-import Vue from 'vue'
-import axios from './axios'
+import { axios } from './axios'
 import store from './../store'
-import { get } from 'vuex-pathify'
 const { ipcRenderer } = require('electron')
 
 let ps4 = {
@@ -246,4 +244,8 @@ let ps4 = {
 
 }
 
-Vue.prototype.$ps4 = ps4
+export default {
+  install(app) {
+    app.config.globalProperties.$ps4 = ps4
+  }
+}

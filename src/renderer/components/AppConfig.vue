@@ -3,7 +3,7 @@
 
   <el-divider content-position="left">{{ $t('config.app.title') }}</el-divider>
   <div class="q-pl-md">
-  <el-form :inline="true" label-width="150px" size="mini" label-position="left" @submit.native.prevent>
+  <el-form :inline="true" label-width="150px" size="small" label-position="left" @submit.prevent>
       <el-row>
         <el-col :span="8">
             <el-form-item :label="$t('config.app.language')">
@@ -71,7 +71,7 @@
   -->
   <el-divider content-position="left">{{ $t('config.app.features') }}</el-divider>
   <div class="q-pl-md">
-  <el-form :inline="true" label-width="150px" size="mini" label-position="left" @submit.native.prevent>
+  <el-form :inline="true" label-width="150px" size="small" label-position="left" @submit.prevent>
       <el-row>
         <el-col :span="8">
             <el-form-item :label="$t('config.app.notifications')">

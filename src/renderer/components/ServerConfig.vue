@@ -4,7 +4,7 @@
   <el-divider content-position="left">{{ $t('config.server.title') }}</el-divider>
 
   <div class="q-pl-md">
-  <el-form :inline="true" label-width="150px" size="mini" label-position="left" @submit.native.prevent>
+  <el-form :inline="true" label-width="150px" size="small" label-position="left" @submit.prevent>
       <el-row :gutter="10">
           <el-col :span="10">
               <el-form-item :label="$t('config.server.ip')">
@@ -19,7 +19,7 @@
               </el-form-item>
           </el-col>
           <el-col :span="4">
-              <el-button size="mini" icon="fa fa-server" style="width: calc(100% - 40px)" @click="$root.openServer()"> {{ $t('config.server.serverButton') }} </el-button>
+              <el-button size="small" style="width: calc(100% - 40px)" @click="$root.openServer()"><i class="fa fa-server"/> {{ $t('config.server.serverButton') }} </el-button>
           </el-col>
       </el-row>
 
@@ -42,8 +42,8 @@
               </el-form-item>
           </el-col>
           <el-col :span="4">
-              <el-button size="mini" icon="el-icon-refresh" @click="$root.sendServer('refresh')"></el-button>
-              <el-button size="mini" icon="el-icon-switch-button" @click="$root.sendServer('toggle')"></el-button>
+              <el-button size="small" icon="el-icon-refresh" @click="$root.sendServer('refresh')"></el-button>
+              <el-button size="small" icon="el-icon-switch-button" @click="$root.sendServer('toggle')"></el-button>
           </el-col>
       </el-row>
 
@@ -53,8 +53,10 @@
           <el-col :span="24">
               <el-form-item :label="$t('config.server.pkgBasePath')" class="base_path">
                 <el-input :placeholder="$t('config.server.pkgBasePathPlaceholder')" v-model="server.base_path" disabled>
-                    <el-button slot="append" icon="el-icon-edit" @click.native="enterManuallyBasePath"> {{ $t('config.server.pkgBasePathEnter') }}</el-button>
-                    <el-button slot="append" icon="el-icon-folder" @click.native="selectBasePath"> {{ $t('config.server.pkgBasePathChoose') }}</el-button>
+                    <template #append>
+                      <el-button icon="el-icon-edit" @click="enterManuallyBasePath"> {{ $t('config.server.pkgBasePathEnter') }}</el-button>
+                      <el-button icon="el-icon-folder" @click="selectBasePath"> {{ $t('config.server.pkgBasePathChoose') }}</el-button>
+                    </template>
                 </el-input>
               </el-form-item>
           </el-col>

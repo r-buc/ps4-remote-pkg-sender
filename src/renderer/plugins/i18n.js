@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import VueI18n from 'vue-i18n'
+import { createI18n } from 'vue-i18n'
 import en from '@/lang/en.json'
 
-Vue.use(VueI18n)
-
-const i18n = new VueI18n({
+// legacy: true keeps vue-i18n in Options API mode (this.$t / $tc / etc.)
+// across the entire codebase, avoiding a large rewrite of all component templates.
+const i18n = createI18n({
+  legacy: true,
   locale: 'en',
   fallbackLocale: 'en',
   messages: {
@@ -16,17 +16,17 @@ const i18n = new VueI18n({
  * @param {String} locale
  */
 export async function loadMessages (locale) {
-  if (Object.keys(i18n.getLocaleMessage(locale)).length === 0) {
+  if (Object.keys(i18n.global.getLocaleMessage(locale)).length === 0) {
     try {
       const messages = await import(/* @vite-ignore */ `../lang/${locale}.json`)
-      i18n.setLocaleMessage(locale, messages.default || messages)
+      i18n.global.setLocaleMessage(locale, messages.default || messages)
     } catch (e) {
       console.warn(`Failed to load messages for locale: ${locale}`, e)
     }
   }
 
-  if (i18n.locale !== locale) {
-    i18n.locale = locale
+  if (i18n.global.locale.value !== locale) {
+    i18n.global.locale.value = locale
   }
 }
 

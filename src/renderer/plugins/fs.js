@@ -1,4 +1,3 @@
-import Vue from 'vue'
 const fs = require('fs')
 const fs_ = fs.promises
 const path = require('path')
@@ -348,6 +347,10 @@ let o = {
 
 }
 
-Vue.prototype.$fs = o
+export default {
+  install(app) {
+    app.config.globalProperties.$fs = o
+  }
+}
 
-export default o
+export { o as fs }

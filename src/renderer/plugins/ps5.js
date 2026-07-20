@@ -10,11 +10,8 @@
     {"action":"status","content_id":"..."}
 */
 
-import Vue from 'vue'
 import store from '../store'
-
 const net = require('net')
-
 let ps5 = {
     debug(){
         let ps4ip = store.getters['app/getPS4IP']
@@ -194,4 +191,8 @@ let ps5 = {
     },
 }
 
-Vue.prototype.$ps5 = ps5
+export default {
+  install(app) {
+    app.config.globalProperties.$ps5 = ps5
+  }
+}

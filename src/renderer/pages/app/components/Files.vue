@@ -1,7 +1,7 @@
 <template>
 <div>
     Type: {{ type }} | {{ files.length }} Items
-    <div style="white-space: pre" v-html="$helper.prettyPrint(files)">{{ files }}</div>
+    <div style="white-space: pre" v-html="$helper.prettyPrint(files)"></div>
 </div>
 </template>
 

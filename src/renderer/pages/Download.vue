@@ -108,7 +108,7 @@
         <b>Your App here?</b> <br>
         <br>
         If you would like to add your Homebrew App to the Downloads Area <br>
-        message me on Discord at <el-tag size="mini">Gkiokan#0735</el-tag> <small style="font-size: 13px">(legacy)</small> or <el-tag size="mini">gkiokan</el-tag><br>
+        message me on Discord at <el-tag size="small">Gkiokan#0735</el-tag> <small style="font-size: 13px">(legacy)</small> or <el-tag size="small">gkiokan</el-tag><br>
 
     </el-col>
   </el-row>

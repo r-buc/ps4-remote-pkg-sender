@@ -1,4 +1,7 @@
-import Vue from 'vue'
 import debounce from 'debounce'
 
-Vue.prototype.$debounce = debounce
+export default {
+  install(app) {
+    app.config.globalProperties.$debounce = debounce
+  }
+}

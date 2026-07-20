@@ -5,14 +5,16 @@
     Date: 2019-05-09
 */
 
-import Vue from 'vue'
-
 const modulesList = import.meta.glob('./*.vue', { eager: true })
-const layouts = Object.keys(modulesList)
+// Strip leading './' and trailing '.vue' to get the bare filename as a fallback key
+const componentEntries = Object.keys(modulesList)
   .map(file => [file.replace(/^\.\//, '').replace(/\.vue$/, ''), modulesList[file]])
-  .reduce((components, [name, component]) => {
-    let Component = component.default || component
-    if(Component.name) {
-      Vue.component(Component.name, Component)
-    }
-  }, {})
+
+export default {
+  install(app) {
+    componentEntries.forEach(([name, component]) => {
+      const Component = component.default || component
+      app.component(Component.name || name, Component)
+    })
+  }
+}

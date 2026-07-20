@@ -3,8 +3,8 @@
     <h2>Playstation API Logs </h2>
 
     <div class="mb-md">
-        <el-button size="mini" icon="refresh" @click="reset"> Reset Logs </el-button>
-        <el-button size="mini" icon="eye" @click="showData = !showData"> Toggle Data </el-button>
+        <el-button size="small" icon="refresh" @click="reset"> Reset Logs </el-button>
+        <el-button size="small" icon="eye" @click="showData = !showData"> Toggle Data </el-button>
     </div>
 
     <div v-for="(log,i) in logs" :key="i">

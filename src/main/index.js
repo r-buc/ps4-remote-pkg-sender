@@ -5,7 +5,6 @@ import { format as formatUrl } from 'url'
 import helper from './helper'
 import menu from './menu'
 import tray from './tray'
-import store from './../renderer/store/index.js'
 
 // prepatch 
 console.log("Plattform Check " + process.platform)
@@ -91,12 +90,6 @@ function createPS4Window(){
   })
   window.on('closed', (event) => { windows.ps4 = null })
   windows.ps4 = window
-}
-
-function hearthbeat(){
-  setInterval( () => {
-    store.dispatch('app/addTime')
-  }, 1000)
 }
 
 function registerChannel(){
