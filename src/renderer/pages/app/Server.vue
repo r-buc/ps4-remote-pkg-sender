@@ -27,6 +27,7 @@
 const fs = require('fs')
 const path = require('path')
 import { get, sync } from 'vuex-pathify'
+import { markRaw } from 'vue'
 const { shell, ipcRenderer } = require('electron')
 
 const express = require('express')
@@ -51,11 +52,14 @@ export default {
     data(){ return {
         tab: 'logs',
         run: 0,
-        host: {
+        // markRaw: Express/Node objects (app, http.Server, Router) use native
+        // Map/Set internals with V8 brand checks that break when wrapped in a
+        // Vue reactivity Proxy (throws "TypeError: Illegal invocation").
+        host: markRaw({
             app: null,
             server: null,
             router: null,
-        }
+        })
     }},
 
     mounted(){
@@ -91,11 +95,13 @@ export default {
         // },
 
         'serverFiles'(o, n){
-            console.log("::server | serverFiles changed", this.run, o, n)
-            this.run++
-            if(this.run <=2){
-                return
-            }
+            // NOTE: createPaths()/addFilesFromBasePath() also run synchronously
+            // during mounted(), before this async directory scan has finished,
+            // so serverFiles is still empty at that point and servingFiles ends
+            // up empty. This watcher is what's supposed to recompute
+            // servingFiles once the scan actually completes - a stale
+            // "this.run <= 2" guard used to skip that first real update
+            // entirely, leaving the served file list permanently empty.
             this.$store.dispatch('server/addLog', "Server files has been changed. Reload files.")
             this.createPaths()
         },
@@ -104,6 +110,12 @@ export default {
             console.log("::server | draggedFiles changed")
             this.$store.dispatch('server/addLog', "Dragged files has been changed. Reload files.")
             this.createPaths()
+        },
+
+        'status'(val){
+            // This window has its own isolated Vuex store, so let the config
+            // window know the server status changed.
+            ipcRenderer.send('server-status', val)
         }
     },
 
@@ -127,6 +139,20 @@ export default {
                     else
                       this.startServer()
                 }
+            })
+
+            // This window has its own isolated Vuex store; pick up config
+            // changes made in the config window instead of relying on a
+            // stale copy loaded at startup.
+            ipcRenderer.on('server-config', (event, data) => {
+                console.log("ipc channel | server-config ", data)
+                this.$store.dispatch('app/setServer', data)
+            })
+
+            // Let a newly (re)mounted config window pull our current status,
+            // since it may have missed earlier 'server-status' broadcasts.
+            ipcRenderer.on('server-status-request', () => {
+                ipcRenderer.send('server-status', this.status)
             })
         },
 

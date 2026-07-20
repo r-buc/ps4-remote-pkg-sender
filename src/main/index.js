@@ -97,6 +97,13 @@ function registerChannel(){
     ipcMain.on('server-show', () => windows.server.show() )
     ipcMain.on('show', (event, data) => showWindow(data) )
 
+    // The server (Express host) window and the main/config window each have
+    // their own isolated Vuex store, so config edits and status updates must
+    // be relayed explicitly between them.
+    ipcMain.on('server-config', (event, data) => windows.server.webContents.send('server-config', data) )
+    ipcMain.on('server-status', (event, data) => windows.main.webContents.send('server-status', data) )
+    ipcMain.on('server-status-request', () => windows.server.webContents.send('server-status-request') )
+
     ipcMain.on('main', (event, data) => windows.main.webContents.send('main', data) )
     ipcMain.on('main-error', (event, data) => windows.main.webContents.send('main-error', data) )
     ipcMain.on('main-route', (event, data) => windows.main.webContents.send('main-route', data) )
@@ -106,6 +113,15 @@ function registerChannel(){
     ipcMain.on('error', (event, data) => windows.main.webContents.send('error', data) )
     ipcMain.on('notify', (event, data) => notify(data) )
     ipcMain.on('quit', () => app.quit() )
+
+    // Generic cross-window Vuex sync relay (see store/plugins/crossWindowSync.js).
+    // Broadcasts a committed mutation to every window except the one that sent it.
+    ipcMain.on('store-sync', (event, data) => {
+        BrowserWindow.getAllWindows().forEach((win) => {
+            if(win.webContents.id !== event.sender.id)
+              win.webContents.send('store-sync', data)
+        })
+    })
 }
 
 function addShortcuts(){

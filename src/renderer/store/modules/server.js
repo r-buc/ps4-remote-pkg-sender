@@ -45,7 +45,11 @@ export const actions = {
 
         console.log("::store | patched files", files.length)
         // console.log(files)
-        commit('serverFiles', files)
+        // vuex-pathify's auto-generated mutation for state.serverFiles is
+        // named 'SET_SERVER_FILES' (const-case), not 'serverFiles' - that
+        // mutation didn't exist, so this commit silently no-op'd and
+        // serverFiles never actually updated.
+        commit('SET_SERVER_FILES', files)
         // commit('loading', false)
     },
 

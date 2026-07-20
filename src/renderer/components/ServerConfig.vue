@@ -118,11 +118,18 @@ export default {
 
     mounted(){
         this.loadNetworkInterfaces()
+        this.registerChannel()
+        // Push the current config immediately so the (already running) server
+        // window picks it up even if the user doesn't change anything.
+        ipcRenderer.send('server-config', JSON.parse(JSON.stringify(this.server)))
+        // Pull the server window's current status in case it changed before
+        // this page was mounted (its broadcasts are otherwise fire-and-forget).
+        ipcRenderer.send('server-status-request')
     },
 
     computed: {
         ps4: sync('app/ps4'),
-        server: get('app/server'),
+        server: sync('app/server'),
         status: get('server/status'),
     },
 
@@ -157,6 +164,15 @@ export default {
     },
 
     methods: {
+        registerChannel(){
+            // The server (Express host) runs in its own hidden BrowserWindow with
+            // its own isolated Vuex store, so config changes made here need to be
+            // forwarded explicitly instead of relying on shared state.
+            ipcRenderer.on('server-status', (event, data) => {
+                this.$store.dispatch('server/setStatus', data)
+            })
+        },
+
         loadNetworkInterfaces(){
             this.ifaces = this.$helper.getNetWorkInterfaces()
 
@@ -183,6 +199,8 @@ export default {
         async save(){
             console.log("Saving Local Server Configuration")
             await this.$store.dispatch('app/setServer', this.server)
+            // Electron's IPC can't structured-clone a Vue reactive Proxy, so send a plain copy.
+            ipcRenderer.send('server-config', JSON.parse(JSON.stringify(this.server)))
         },
 
         enterManuallyBasePath(){
