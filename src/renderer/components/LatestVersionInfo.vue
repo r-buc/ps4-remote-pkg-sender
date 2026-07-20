@@ -1,14 +1,16 @@
 <template>
-<el-dialog title="Latest Version Info" :visible.sync="show">
+<el-dialog title="Latest Version Info" v-model="show">
 
     You are currently on Version <b>{{ current }}</b> <br>
     Latest Release Version is <b>{{ version }}</b> <br>
     <br>
 
-    <el-tag type="info" v-if="compare >= 0"> <i class="el-icon-check mr-md" />
+    <el-tag type="info" v-if="compare >= 0">
+        <el-icon><Check /></el-icon>
         You are already on the latest version
     </el-tag>
-    <el-tag type="success" class="cursor-pointer" v-if="compare == -1" @click="goToLatestRelease"> <i class="el-icon-download mr-md" />
+    <el-tag type="success" class="cursor-pointer" v-if="compare == -1" @click="goToLatestRelease">
+        <el-icon><Download /></el-icon>
         New Version is available for you. Checkout on GitHub Releases.
     </el-tag>
 
@@ -23,8 +25,8 @@
             </thead>
             <tbody>
               <tr class="el-table__row" v-for="(asset,i) in assets">
-                  <td class="el-table__cell">{{ asset.name }}</td>
-                  <td class="el-table__cell text-right">{{ $helper.formatBytes(asset.size) }}</td>
+                  <td class="el-table__cell">{{ asset.name }}</td>
+                  <td class="el-table__cell text-right">{{ $helper.formatBytes(asset.size) }}</td>
                   <td class="el-table__cell text-center">
                       <el-button circle icon="el-icon-download" @click="$root.openWithAutoclose(asset.browser_download_url)" />
                   </td>
@@ -33,16 +35,22 @@
         </table>
     </div>
 
-    <span slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="hide">Ok</el-button>
-    </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button size="small" @click="hide">Ok</el-button>
+      </span>
+    </template>
 
 </el-dialog>
 </template>
 
 <script>
+import { Check, Download } from '@element-plus/icons-vue'
+
 export default {
     name: 'LatestVersionInfo',
+
+    components: { Check, Download },
 
     data(){ return {
         show: false,

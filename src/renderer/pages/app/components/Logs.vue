@@ -2,7 +2,7 @@
 <div>
 
     <div class="mb-md">
-        <el-button size="mini" @click="$store.dispatch('server/resetLogs')"> Reset Logs </el-button>
+        <el-button size="small" @click="$store.dispatch('server/resetLogs')"> Reset Logs </el-button>
     </div>
   
     <div class="log" v-for="log in logs">

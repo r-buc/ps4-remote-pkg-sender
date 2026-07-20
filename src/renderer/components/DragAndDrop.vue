@@ -2,7 +2,7 @@
 <div class="main_drag_and_drop_overlay">
 
     <div class="close">
-        <el-button size="mini" icon="el-icon-close" @click="$emit('close')"> Close </el-button>
+        <el-button size="small" icon="el-icon-close" @click="$emit('close')"> Close </el-button>
     </div>
 
     <div class="inner">
@@ -12,13 +12,13 @@
             Files will be added to the <b class="text-success"> Server > Dragged Tab </b>
 
             <el-row class="space" v-if="isDragged">
-                <el-button type="success active" size="medium" icon="el-icon-document-add" @click="addFiles"> Yes, add all files </el-button>
-                <el-button size="medium" icon="el-icon-close" @click="$emit('close')"> Nope, just cancel </el-button>
+                <el-button type="success active" size="default" icon="el-icon-document-add" @click="addFiles"> Yes, add all files </el-button>
+                <el-button size="default" icon="el-icon-close" @click="$emit('close')"> Nope, just cancel </el-button>
             </el-row>
         </div>
 
         <div class="icon" style="margin-bottom: 30px" v-if="!isDragged">
-            <i class="el-icon-box" />
+            <el-icon style="font-size: 80px;"><Box /></el-icon>
         </div>
 
         <div class="scrollarea">
@@ -49,9 +49,12 @@
 
 <script>
 import { get, sync } from 'vuex-pathify'
+import { Box } from '@element-plus/icons-vue'
 
 export default {
     name: 'DragAndDrop',
+
+    components: { Box },
 
     data(){ return {
 

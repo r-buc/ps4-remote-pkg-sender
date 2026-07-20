@@ -5,7 +5,6 @@ import { format as formatUrl } from 'url'
 import helper from './helper'
 import menu from './menu'
 import tray from './tray'
-import store from './../renderer/store/index.js'
 
 // prepatch 
 console.log("Plattform Check " + process.platform)
@@ -95,7 +94,7 @@ function createPS4Window(){
 
 function hearthbeat(){
   setInterval( () => {
-    store.dispatch('app/addTime')
+    // timer tick – state is managed in the renderer process
   }, 1000)
 }
 

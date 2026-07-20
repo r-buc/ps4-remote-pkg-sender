@@ -14,25 +14,27 @@
         <el-form class="base_path_input_form" v-if="$root.serverTab == 'server'">
           <el-form-item style="margin: 0px; width: 100%;">
             <el-input size="small" :placeholder="$t('config.server.pkgBasePathPlaceholder')" v-model="server.base_path" disabled>
-              <el-button size="mini" slot="append" icon="el-icon-edit" @click.native="enterManuallyBasePath"></el-button>
-              <el-button size="mini" slot="append" icon="el-icon-folder" @click.native="selectBasePath"></el-button>
-              <el-button size="mini" slot="append" icon="el-icon-plus" @click.native="addAllFilesToQueue"> {{ $t('common.buttons.addAll') }}</el-button>
+              <template #append>
+                <el-button size="small" icon="el-icon-edit" @click="enterManuallyBasePath"></el-button>
+                <el-button size="small" icon="el-icon-folder" @click="selectBasePath"></el-button>
+                <el-button size="small" icon="el-icon-plus" @click="addAllFilesToQueue"> {{ $t('common.buttons.addAll') }}</el-button>
+              </template>
             </el-input>
           </el-form-item>
         </el-form>
 
-        <el-button size="small" icon="el-icon-delete" @click.native="removeFilesFromDragged" v-if="tab == 'dragged'"> {{ $t('common.buttons.remove') }}</el-button>
-        <el-button size="small" icon="el-icon-plus" @click.native="addAllFilesToQueue" v-if="tab == 'dragged'"> {{ $t('common.buttons.addAll') }}</el-button>
+        <el-button size="small" icon="el-icon-delete" @click="removeFilesFromDragged" v-if="tab == 'dragged'"> {{ $t('common.buttons.remove') }}</el-button>
+        <el-button size="small" icon="el-icon-plus" @click="addAllFilesToQueue" v-if="tab == 'dragged'"> {{ $t('common.buttons.addAll') }}</el-button>
       </el-col>
       <el-col :span="4">
-        <el-input v-model="search" size="small" :placeholder="$t('common.placeholder.search')" prefix-icon="fas fa-search"/>
+        <el-input v-model="search" size="small" :placeholder="$t('common.placeholder.search')"><template #prefix><i class="fas fa-search" /></template></el-input>
       </el-col>
     </el-row>
 
 
     <el-table :data="files" v-loading="loading" class="file"
         :element-loading-text="$t('server.messages.loadingFiles')"
-        element-loading-spinner="el-icon-loading"
+       
         element-loading-background="rgba(255, 255, 255, 0.8)"
         :empty-text="$t('common.table.noData')"
         :max-height="tableMaxHeight"
@@ -40,7 +42,7 @@
       <el-table-column type="index" label="#" width="55" align="center"></el-table-column>
 
       <el-table-column type="expand">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div class="expand-section">
             <div class="expand-section-title">{{ $t('queue.expand.filePaths') }}</div>
             <div class="expand-paths">
@@ -76,17 +78,17 @@
               </div>
               <div class="expand-item" v-if="scope.row.sfo.VERSION">
                 <span class="expand-label">{{ $t('queue.expand.version') }}</span>
-                <el-tag size="mini" type="success">{{ scope.row.sfo.VERSION }}</el-tag>
+                <el-tag size="small" type="success">{{ scope.row.sfo.VERSION }}</el-tag>
               </div>
               <div class="expand-item" v-if="scope.row.sfo.CATEGORY">
                 <span class="expand-label">{{ $t('queue.expand.category') }}</span>
-                <el-tag size="mini" :type="$helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).color">
+                <el-tag size="small" :type="$helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).color">
                   {{ $helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).label }}
                 </el-tag>
               </div>
               <div class="expand-item" v-if="scope.row.sfo.CONTENT_ID">
                 <span class="expand-label">{{ $t('queue.expand.contentId') }}</span>
-                <el-tag size="mini" type="info">{{ scope.row.sfo.CONTENT_ID }}</el-tag>
+                <el-tag size="small" type="info">{{ scope.row.sfo.CONTENT_ID }}</el-tag>
               </div>
             </div>
           </div>
@@ -96,19 +98,19 @@
       </el-table-column>
 
       <el-table-column :label="$t('common.table.cover')" width="100" v-if="sfoEnabled">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div class='image' :style="{ backgroundImage: 'url('+scope.row.image+')' }"/>
         </template>
       </el-table-column>
 
       <el-table-column prop="name" :label="$t('common.table.name')" min-width="220">
-        <template slot-scope="scope">
+        <template #default="scope">
           <template v-if="scope.row.sfo?.readSFOHeader && scope.row.sfo.TITLE">
             <div class="sfo-title">
               <span class="sfo-title-name-tag">{{ scope.row.sfo.TITLE }}</span>
             </div>
             <div class="sfo-title">
-              <!--              <el-tag size="mini" type="warning" class="sfo-title-id-tag" v-if="showCUSA && scope.row.cusa">{{ scope.row.cusa }}</el-tag>-->
+              <!--              <el-tag size="small" type="warning" class="sfo-title-id-tag" v-if="showCUSA && scope.row.cusa">{{ scope.row.cusa }}</el-tag>-->
               <span class="sfo-version-tag" v-if="scope.row.sfo.VERSION">[{{ scope.row.sfo.VERSION }}]</span>
               <span class="sfo-title-id-tag" v-if="scope.row.sfo.TITLE_ID">[{{ scope.row.sfo.TITLE_ID }}]</span>
             </div>
@@ -119,7 +121,7 @@
             </div>
           </template>
           <template v-else>
-            <el-tag size="mini" type="warning" class="sfo-title-id-tag" v-if="showCUSA && scope.row.cusa">{{ scope.row.cusa }}</el-tag>
+            <el-tag size="small" type="warning" class="sfo-title-id-tag" v-if="showCUSA && scope.row.cusa">{{ scope.row.cusa }}</el-tag>
             {{ scope.row.name }}
             <small v-if="scope.row.sfo?.readSFOHeader">(v{{ scope.row.sfo.APP_VER }})</small>
           </template>
@@ -127,8 +129,8 @@
       </el-table-column>
 
       <el-table-column :label="$t('common.table.ext')" width="100" v-if="showExtension">
-        <template slot-scope="scope">
-          <el-tag size="mini"
+        <template #default="scope">
+          <el-tag size="small"
               :type="scope.row.ext === '.pkg' ? 'primary' : 'success'"
               disable-transitions>{{ scope.row.ext }}
           </el-tag>
@@ -136,26 +138,26 @@
       </el-table-column>
 
       <el-table-column prop="status" :label="$t('common.table.status')" width="120" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tag size="small" plain :type="$helper.getFileStatus(scope.row.status)">{{ $t('queue.status.' + scope.row.status) || scope.row.status }}</el-tag>
         </template>
       </el-table-column>
 
       <el-table-column prop="size" :label="$t('common.table.size')" width="120" align="right">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tag size="small" plain :type="$helper.getFileSizeType(scope.row.size)">{{ scope.row.size }}</el-tag>
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('common.table.progress')" width="100px" v-if="showPercentage">
-        <template slot-scope="scope">
-          <el-tag size="mini" v-if="0">n/a</el-tag>
+        <template #default="scope">
+          <el-tag size="small" v-if="0">n/a</el-tag>
           <el-progress :stroke-width="15" :percentage="scope.row.percentage" :text-inside="true" stroke-linecap="square"></el-progress>
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('common.table.operation')" width="100" align="right">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button circle size="small" icon="fa fa-minus" @click="removeFromQueue(scope.row)" v-if="scope.row.status == 'in queue'"/>
           <el-button circle size="small" icon="el-icon-plus" @click="addToQueue(scope.row)" v-if="scope.row.status != 'in queue'"/>
           <el-button circle size="small" icon="fa fa-cloud-download-alt" @click="check(scope.row.url)" v-if="tab == 'server'"/>

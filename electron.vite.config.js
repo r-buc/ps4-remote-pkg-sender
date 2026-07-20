@@ -1,5 +1,5 @@
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
-import vue from '@vitejs/plugin-vue2'
+import vue from '@vitejs/plugin-vue'
 import path from 'path'
 
 export default defineConfig({
@@ -33,7 +33,8 @@ export default defineConfig({
     },
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'src/renderer')
+        '@': path.resolve(__dirname, 'src/renderer'),
+        'vue-class-component': path.resolve(__dirname, 'src/renderer/shims/vue-class-component.js'),
       },
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
     }

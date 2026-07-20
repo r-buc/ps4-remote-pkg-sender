@@ -10,7 +10,6 @@
     params.contentName = name
 */
 
-import Vue from 'vue'
 import store from '../store'
 // import net from 'net'
 const net = require('net')
@@ -206,4 +205,8 @@ let ps4_goldhen = {
 
 }
 
-Vue.prototype.$ps4_goldhen = ps4_goldhen
+export default {
+  install(app) {
+    app.config.globalProperties.$ps4_goldhen = ps4_goldhen
+  }
+}

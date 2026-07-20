@@ -12,8 +12,8 @@
 
               <el-menu-item index="config">{{ $t('menu.config') }}</el-menu-item>
 
-              <el-submenu index="miscs">
-                  <template slot="title">{{ $t('menu.miscs') }}</template>
+              <el-sub-menu index="miscs">
+                  <template #title>{{ $t('menu.miscs') }}</template>
 
                   <el-menu-item index="downloads">{{ $t('menu.downloads') }}</el-menu-item>
                   <el-menu-item index="changelog">{{ $t('menu.changelog') }}</el-menu-item>
@@ -28,7 +28,7 @@
                   <el-menu-item @click="$root.open(links.github_repo_sender_singleDPI)">{{ $t('menu.githubRepoSenderSingleDPI') }}</el-menu-item>
                   <el-menu-item @click="$root.open(links.github_repo_singleDPI)">{{ $t('menu.githubRepoSingleDPI') }}</el-menu-item>
                   <el-menu-item @click="$root.open(links.report_issue)">{{ $t('menu.reportIssue') }}</el-menu-item>
-              </el-submenu>
+              </el-sub-menu>
 
               <el-menu-item index="settings">{{ $t('menu.settings') }}</el-menu-item>
               <el-menu-item index="">
@@ -50,25 +50,27 @@
 
 
               <div class='top_right_header'>
-                  <el-button size="mini" icon="el-icon-user" round @click="move({ name: 'user' })"> {{ $t('menu.supportFeatures') }} </el-button>
+                  <el-button size="small" icon="el-icon-user" round @click="move({ name: 'user' })"> {{ $t('menu.supportFeatures') }} </el-button>
 
                   <el-badge :is-dot="true" value="new" :hidden="!newVersionAvailable" class="sync_icon">
                       <div class="" @click="checkUpdate">
-                          <i class="el-icon-refresh" />
+                          <el-icon><RefreshRight /></el-icon>
                       </div>
                   </el-badge>
 
                   <el-dropdown class="window_dropdown" @command="handleViewCallback">
-                    <i class="el-icon-files" />
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item command="server"> {{ $t('menu.openLocalServer') }} </el-dropdown-item>
-                      <el-dropdown-item command="ps4"> {{ $t('menu.openPsApiLogs') }} </el-dropdown-item>
-                      <el-dropdown-item command="info"> {{ $t('menu.info') }} </el-dropdown-item>
-                    </el-dropdown-menu>
+                    <el-icon><Files /></el-icon>
+                    <template #dropdown>
+                      <el-dropdown-menu>
+                        <el-dropdown-item command="server"> {{ $t('menu.openLocalServer') }} </el-dropdown-item>
+                        <el-dropdown-item command="ps4"> {{ $t('menu.openPsApiLogs') }} </el-dropdown-item>
+                        <el-dropdown-item command="info"> {{ $t('menu.info') }} </el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
                   </el-dropdown>
 
                   <div class='close_application' @click="closeApplicationRequest">
-                      <i class="el-icon-switch-button" />
+                      <el-icon><SwitchButton /></el-icon>
                   </div>
               </div>
 
@@ -96,11 +98,18 @@
 
 <script>
 import { get } from 'vuex-pathify'
-const { shell, ipcRenderer, remote } = require('electron')
+const { shell, ipcRenderer } = require('electron')
 import links from '@/../config/links'
+import { RefreshRight, Files, SwitchButton } from '@element-plus/icons-vue'
 
 export default {
   name: 'DefaultLayout',
+
+  components: {
+    RefreshRight,
+    Files,
+    SwitchButton,
+  },
 
   data(){ return {
       links,
@@ -133,7 +142,7 @@ export default {
       window.addEventListener('drop', this.drop)
   },
 
-  destroyed(){
+  unmounted(){
       window.removeEventListener('scroll', this.scroll)
       window.removeEventListener('dragover', this.dragover)
       window.removeEventListener('drop', this.drop)

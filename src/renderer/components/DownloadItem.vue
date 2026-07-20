@@ -1,11 +1,13 @@
 <template>
-<el-dialog title="Download Item" :visible.sync="show">
+<el-dialog title="Download Item" v-model="show">
 
     <webview :src="item" v-if="item" useragent="StoreHAX" style="width: 100vw; height: 100vh;" />
 
-    <span slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="hide">Cancel</el-button>
-    </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button size="small" @click="hide">Cancel</el-button>
+      </span>
+    </template>
 
 </el-dialog>
 </template>

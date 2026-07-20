@@ -36,7 +36,7 @@
 
     <el-divider />
 
-    <el-button size="mini" @click="$store.dispatch('app/resetConfig')"> Reset App Settings </el-button>
+    <el-button size="small" @click="$store.dispatch('app/resetConfig')"> Reset App Settings </el-button>
 
     <div v-if="app.config.showConfigObject">
         <div style="height: 40px" />

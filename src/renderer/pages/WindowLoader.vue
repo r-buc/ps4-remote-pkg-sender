@@ -9,7 +9,7 @@
     </div>
 
     <div class="header text-center">
-        <el-button round @click="close"> Close Downloading Window <i class="el-icon-close" /> </el-button>
+        <el-button round @click="close"> Close Downloading Window <el-icon><Close /></el-icon> </el-button>
 
         <div class="url" style="text-align: left; margin-top: 30px;">
           <div style="margin-bottom: 10px; display:block; font-weight:bold;">Downloading </div>
@@ -23,8 +23,12 @@
 </template>
 
 <script>
+import { Close } from '@element-plus/icons-vue'
+
 export default {
   name: 'WindowLoader',
+
+  components: { Close },
 
   data(){ return {
       url: ''

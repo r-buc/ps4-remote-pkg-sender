@@ -5,7 +5,7 @@
   <el-divider content-position="left">{{ $t('config.ps4.title') }}</el-divider>
 
   <div class="q-pl-md">
-  <el-form :inline="true" label-width="150px" size="mini" label-position="left" @submit.native.prevent>
+  <el-form :inline="true" label-width="150px" size="small" label-position="left" @submit.prevent>
       <el-row :gutter="20">
           <el-col :span="10">
               <el-form-item :label="$t('config.ps4.ip')">
@@ -14,7 +14,7 @@
           </el-col>
 
           <el-col :span="10">
-              <el-button size="mini" icon="el-icon-search" :disabled="true">{{ $t('config.ps4.searchButton') }}</el-button>
+              <el-button size="small" icon="el-icon-search" :disabled="true">{{ $t('config.ps4.searchButton') }}</el-button>
           </el-col>
       </el-row>
 
@@ -40,7 +40,7 @@
           </el-col>
 
           <el-col :span="5">
-              <el-button size="small" @click="checkPS4" style="width: 100%"> <i class="el-icon-loading" v-if="testingConnection" />  {{ $t('common.buttons.test') }}</el-button>
+              <el-button size="small" @click="checkPS4" style="width: 100%"> <el-icon v-if="testingConnection"><Loading /></el-icon>  {{ $t('common.buttons.test') }}</el-button>
           </el-col>
       </el-row>
 
@@ -65,7 +65,7 @@
       <el-row :gutter="20" v-if="ps4.app == 'singleDPI'">
           <el-col :span="10">
               <el-form-item :label="$t('config.ps4.queueMode')">
-                  <el-radio-group v-model="ps4.singleDPI_queue_mode" size="mini">
+                  <el-radio-group v-model="ps4.singleDPI_queue_mode" size="small">
                       <el-radio-button label="immediate">{{ $t('config.ps4.queueModeImmediate') }}</el-radio-button>
                       <el-radio-button label="delay">{{ $t('config.ps4.queueModeDelay') }}</el-radio-button>
                   </el-radio-group>
@@ -103,9 +103,12 @@
 
 <script>
 import { get, sync } from 'vuex-pathify'
+import { Loading } from '@element-plus/icons-vue'
 
 export default {
     name: 'PS4Config',
+
+    components: { Loading },
 
     data(){ return {
         testingConnection: false,

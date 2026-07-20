@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import axios from 'axios'
 
 let git = {
@@ -34,4 +33,8 @@ let git = {
     
 }
 
-Vue.prototype.$git = git
+export default {
+  install(app) {
+    app.config.globalProperties.$git = git
+  }
+}

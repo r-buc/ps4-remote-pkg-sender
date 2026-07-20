@@ -18,7 +18,7 @@
     <br>
     I will talk about a couple big changes that will come soon or later, depending on your support. <br>
     This particular update (v2.9.1) has been delayed almost over one year (last update August 2022). <br>
-    I've put a <el-tag size="mini" type="danger" class="cursor-pointer" @click="$root.open('https://ko-fi.com/gkiokan/goal?g=0')" target="_blank">Ko-Fi Goal</el-tag> out there, so anyone who wants to donate are welcome! <br>
+    I've put a <el-tag size="small" type="danger" class="cursor-pointer" @click="$root.open('https://ko-fi.com/gkiokan/goal?g=0')" target="_blank">Ko-Fi Goal</el-tag> out there, so anyone who wants to donate are welcome! <br>
     The faster the Goal hits, the more time I can spend on the updates - choice is yours :) <br>
     <br>
     Note: This View will became the User Profile Center after the update<br>

@@ -9,9 +9,9 @@
 
   <el-divider />
 
-  <el-button size="mini" @click="save" v-if="false">Save Configuration </el-button>
+  <el-button size="small" @click="save" v-if="false">Save Configuration </el-button>
 
-  <el-button size="mini" @click="reset">Reset Configuration</el-button>
+  <el-button size="small" @click="reset">Reset Configuration</el-button>
 
 </div>
 </template>

@@ -1,8 +1,6 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 import pathify from './pathify'
 
-const { createSharedMutations } = require("vuex-electron")
 // NOTE: createPersistedState is intentionally NOT used here. vuex-electron's
 // persisted-state plugin relies on the "electron-store" package, whose constructor
 // unconditionally calls (electron.app || electron.remote.app).getPath('userData').
@@ -11,8 +9,6 @@ const { createSharedMutations } = require("vuex-electron")
 // (and thus the whole Vue app) from ever mounting - this was the root cause of the
 // original black/white screen. TODO: reintroduce persistence via a renderer-safe
 // mechanism (e.g. IPC to a main-process store, or localStorage).
-
-Vue.use(Vuex)
 
 // Load store modules dynamically.
 const modulesList = import.meta.glob('./modules/*.js', { eager: true })
@@ -29,11 +25,10 @@ const modules = Object.keys(modulesList)
         return { ...modules, [name]: mod }
     }, {})
 
-function createStore(){
-    return new Vuex.Store({
+function createStoreInstance(){
+    return createStore({
         plugins: [
             pathify.plugin,
-            createSharedMutations()
         ], // createPersistedState omitted, see note above
         modules
     })
@@ -44,7 +39,7 @@ let lastError
 
 for (let attempt = 0; attempt < 5 && store === undefined; attempt++) {
     try {
-        store = createStore()
+        store = createStoreInstance()
     }
     catch (e) {
         lastError = e

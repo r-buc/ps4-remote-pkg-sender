@@ -43,7 +43,7 @@ modules:
       # Strip unused targets, repository metadata, and point to the manual electronDist
       - jq 'del(.build.win, .build.mac, .build.dmg, .build.publish, .repository) | .build.linux.target="dir" | .build.electronDist="electron-dist"' package.json > package.json.tmp && mv package.json.tmp package.json
       # Build the app from source
-      - npm install --offline
+      - npm install --offline --legacy-peer-deps
       - npm run build:linux:dir
       - cp -a release/linux-unpacked /app/main
       # Install the launcher wrapper

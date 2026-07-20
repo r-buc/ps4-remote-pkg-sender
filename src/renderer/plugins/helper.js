@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import JSON5 from 'json5'
 
 let helper = {
@@ -290,4 +289,8 @@ let helper = {
 
 }
 
-Vue.prototype.$helper = helper
+export default {
+  install(app) {
+    app.config.globalProperties.$helper = helper
+  }
+}

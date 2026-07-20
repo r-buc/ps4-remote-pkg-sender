@@ -4,24 +4,28 @@
       <el-col :span="20">
         <el-dropdown @command="handleDropdownCommand" style="margin-right: 10px">
           <el-button size="small" icon="el-icon-refresh-left">
-            {{ $t('queue.actions.resetOptions') }} <i class="el-icon-arrow-down el-icon--right"></i>
+            {{ $t('queue.actions.resetOptions') }} <el-icon class="el-icon--right"><ArrowDown /></el-icon>
           </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-refresh-left" command="resetAll">{{ $t('queue.dropdown.resetAll') }}</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-refresh-left" command="resetInstalled">{{ $t('queue.dropdown.resetInstalled') }}</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-refresh-left" command="clearFinishedFiles">{{ $t('queue.dropdown.clearFinished') }}</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-delete" command="clearInstalledFiles">{{ $t('queue.dropdown.clearInstalled') }}</el-dropdown-item>
-          </el-dropdown-menu>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item icon="el-icon-refresh-left" command="resetAll">{{ $t('queue.dropdown.resetAll') }}</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-refresh-left" command="resetInstalled">{{ $t('queue.dropdown.resetInstalled') }}</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-refresh-left" command="clearFinishedFiles">{{ $t('queue.dropdown.clearFinished') }}</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-delete" command="clearInstalledFiles">{{ $t('queue.dropdown.clearInstalled') }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
         </el-dropdown>
 
         <el-dropdown @command="handleDropdownCommand" style="margin-right: 10px">
           <el-button size="small" icon="el-icon-check">
-            {{ $t('queue.actions.checkOptions') }} <i class="el-icon-arrow-down el-icon--right"></i>
+            {{ $t('queue.actions.checkOptions') }} <el-icon class="el-icon--right"><ArrowDown /></el-icon>
           </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="fa fa-server" command="checkHB">{{ $t('queue.dropdown.checkHb') }}</el-dropdown-item>
-            <el-dropdown-item icon="fab fa-playstation" command="checkPS4">{{ $t('queue.dropdown.checkPs4') }}</el-dropdown-item>
-          </el-dropdown-menu>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="checkHB"><i class="fa fa-server" /> {{ $t('queue.dropdown.checkHb') }}</el-dropdown-item>
+              <el-dropdown-item command="checkPS4"><i class="fab fa-playstation" /> {{ $t('queue.dropdown.checkPs4') }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
         </el-dropdown>
 
         <el-button size="small" icon="el-icon-link" @click="openAddFileDialog" v-if="app.config.enableExternalLinks"> {{ $t('queue.actions.addUrl') }}</el-button>
@@ -29,9 +33,9 @@
         <el-button size="small" icon="el-icon-sync" :type="queueScanner ? 'success active' : ' active'" @click="toggleQueueScanner"> {{ $t('queue.actions.queueScanner') }}</el-button>
         <el-button size="small"
             :type="queueAutoRunning ? 'danger' : ''"
-            :icon="queueAutoRunning ? 'fa fa-stop' : 'fa fa-play'"
             @click="toggleQueueAutostart"
             v-if="queueScanner">
+          <i :class="queueAutoRunning ? 'fa fa-stop' : 'fa fa-play'" />
           {{ queueAutoRunning ? $t('queue.actions.stop') : $t('queue.actions.autostart') }}
         </el-button>
         <el-checkbox v-model="skipInstalledQueueItems" v-if="queueScanner" style="margin-left: 10px"> {{ $t('queue.actions.skipInstalled') }}</el-checkbox>
@@ -45,14 +49,14 @@
         <el-button size="small" @click="test" v-if="false">Test</el-button>
       </el-col>
       <el-col :span="4">
-        <el-input v-model="search" size="small" :placeholder="$t('common.placeholder.search')" prefix-icon="fas fa-search"/>
+        <el-input v-model="search" size="small" :placeholder="$t('common.placeholder.search')"><template #prefix><i class="fas fa-search" /></template></el-input>
       </el-col>
     </el-row>
 
 
     <el-table :data="files" v-loading="loading" class="file"
         :element-loading-text="$t('server.messages.loadingFiles')"
-        element-loading-spinner="el-icon-loading"
+       
         element-loading-background="rgba(255, 255, 255, 0.8)"
         :empty-text="$t('common.table.noData')"
         :max-height="tableMaxHeight"
@@ -62,18 +66,18 @@
       <el-table-column type="index" label="#" width="55" align="center"></el-table-column>
 
       <el-table-column type="expand">
-        <template slot-scope="scope">
+        <template #default="scope">
           <!-- 状态信息区 -->
           <div class="expand-section">
             <div class="expand-section-title">{{ $t('queue.expand.statusInfo') }}</div>
             <div class="expand-grid">
               <div class="expand-item">
                 <span class="expand-label">{{ $t('queue.expand.percent') }}</span>
-                <el-tag size="mini" type="primary">{{ scope.row.percentage }}%</el-tag>
+                <el-tag size="small" type="primary">{{ scope.row.percentage }}%</el-tag>
               </div>
               <div class="expand-item">
                 <span class="expand-label">{{ $t('common.table.status') }}</span>
-                <el-tag size="mini" :type="$helper.getFileStatus(scope.row.status)">{{ $t('queue.status.' + scope.row.status) || scope.row.status }}</el-tag>
+                <el-tag size="small" :type="$helper.getFileStatus(scope.row.status)">{{ $t('queue.status.' + scope.row.status) || scope.row.status }}</el-tag>
               </div>
               <div class="expand-item">
                 <span class="expand-label">{{ $t('queue.expand.type') }}</span>
@@ -156,13 +160,13 @@
       </el-table-column>
 
       <el-table-column :label="$t('common.table.cover')" width="100" v-if="sfoEnabled">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div class='image' :style="{ backgroundImage: 'url('+scope.row.image+')' }"/>
         </template>
       </el-table-column>
 
       <el-table-column prop="name" :label="$t('common.table.name')" min-width="220">
-        <template slot-scope="scope">
+        <template #default="scope">
           <template v-if="scope.row.sfo?.readSFOHeader && scope.row.sfo.TITLE">
             <div class="sfo-title">
               <span class="sfo-title-name-tag">{{ scope.row.sfo.TITLE }}</span>
@@ -173,7 +177,7 @@
             </div>
           </template>
           <template v-else>
-            <el-tag size="mini" type="warning" class="sfo-title-id-tag" v-if="showCUSA && scope.row.cusa">{{ scope.row.cusa }}</el-tag>
+            <el-tag size="small" type="warning" class="sfo-title-id-tag" v-if="showCUSA && scope.row.cusa">{{ scope.row.cusa }}</el-tag>
             {{ scope.row.name }}
             <small v-if="scope.row.sfo?.readSFOHeader">(v{{ scope.row.sfo.APP_VER }})</small>
           </template>
@@ -181,8 +185,8 @@
       </el-table-column>
 
       <el-table-column :label="$t('common.table.ext')" width="100" v-if="showExtension">
-        <template slot-scope="scope">
-          <el-tag size="mini"
+        <template #default="scope">
+          <el-tag size="small"
               :type="scope.row.ext === '.pkg' ? 'primary' : 'success'"
               disable-transitions>{{ scope.row.ext }}
           </el-tag>
@@ -191,21 +195,21 @@
 
       <el-table-column prop="task" :label="$t('common.table.task')" width="105" v-if="showTask && !isPS5"></el-table-column>
       <el-table-column :label="$t('common.table.version')" width="90" v-if="showVersion">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tag size="small" type="info" v-if="scope.row.sfo?.VERSION">{{ scope.row.sfo.VERSION }}</el-tag>
           <span v-else>-</span>
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('common.table.category')" width="90" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <template v-if="scope.row.sfo?.CATEGORY">
             <el-tooltip :content="baseGameBlockedTooltip(scope.row)" placement="top" :disabled="!isBlockedByMissingBase(scope.row)">
               <span>
                 <el-tag size="small" :type="$helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).color">
                   {{ $helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).label }}
                 </el-tag>
-                <i class="el-icon-time base-blocked-icon" v-if="isBlockedByMissingBase(scope.row)"/>
+                <el-icon class="base-blocked-icon" v-if="isBlockedByMissingBase(scope.row)"><Clock /></el-icon>
               </span>
             </el-tooltip>
           </template>
@@ -214,25 +218,25 @@
       </el-table-column>
 
       <el-table-column prop="status" :label="$t('common.table.status')" width="140" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span class="status-tags" v-if="scope.row.status == 'installedSkipped' || scope.row.status == 'installed + skipped'">
-            <el-tag size="mini" plain type="success">{{ $t('queue.status.installedSkipped') }}</el-tag>
-            <el-tag size="mini" plain type="info">{{ $t('queue.status.skipped') }}</el-tag>
+            <el-tag size="small" plain type="success">{{ $t('queue.status.installedSkipped') }}</el-tag>
+            <el-tag size="small" plain type="info">{{ $t('queue.status.skipped') }}</el-tag>
           </span>
           <el-tag v-else size="small" plain :type="$helper.getFileStatus(scope.row.status)">
-            <i class="el-icon-loading" v-if="scope.row.status == 'installing'"/> {{ $t('queue.status.' + scope.row.status) || scope.row.status }}
+            <el-icon v-if="scope.row.status == 'installing'"><Loading /></el-icon> {{ $t('queue.status.' + scope.row.status) || scope.row.status }}
           </el-tag>
         </template>
       </el-table-column>
 
       <el-table-column prop="size" :label="$t('common.table.size')" width="120" align="right">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tag size="small" plain :type="$helper.getFileSizeType(scope.row.size)">{{ scope.row.size }}</el-tag>
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('common.table.progress')" width="140" align="center" v-if="showPercentage">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div class="progress-display">
             <el-progress :stroke-width="25" :percentage="scope.row.percentage" :show-text="false" stroke-linecap="square"></el-progress>
             <span class="progress-percentage">{{ scope.row.percentage }}%</span>
@@ -247,7 +251,7 @@
       </el-table-column>
 
       <el-table-column :label="$t('common.table.operation')" width="150" align="right">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button circle size="small" icon="fa fa-minus" @click="removeFromQueue(scope.row)"/>
 
           <el-button circle size="small" icon="fa fa-info" @click="info(scope.row)" v-if="false"></el-button>
@@ -277,9 +281,12 @@
 import {get, sync} from 'vuex-pathify'
 import JSON5 from 'json5'
 import i18n from '@/plugins/i18n'
+import { ArrowDown, Clock, Loading } from '@element-plus/icons-vue'
 
 export default {
   name: 'Index',
+
+  components: { ArrowDown, Clock, Loading },
 
   data() {
     return {
