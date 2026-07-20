@@ -20,7 +20,7 @@
     "publish": "electron-builder --mac --linux --win --publish onTag",
     "watch": "electron-vite dev",
     "watch:wait": "wait-on http://127.0.0.1:5173 && electron-vite dev",
-    "flatpak:gen": "flatpak-node-generator npm package-lock.json -o flatpak-node-sources.json"
+    "flatpak:gen": "python3 scripts/flatpak_gen.py"
   },
   "devDependencies": {
     "@element-plus/icons-vue": "^2.3.1",
