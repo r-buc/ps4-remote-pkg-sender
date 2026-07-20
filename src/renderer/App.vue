@@ -25,7 +25,8 @@ export default {
     rpsv2: {
         api: null,
         id: null,
-    }
+    },
+    heartbeatTimer: null,
   }},
 
   computed: {
@@ -60,7 +61,17 @@ export default {
   mounted(){
       this.checkSerial()
       this.$store.dispatch('app/started')
+      this.heartbeatTimer = window.setInterval(() => {
+          this.$store.dispatch('app/addTime')
+      }, 1000)
       this.registerChannel()
+  },
+
+  beforeUnmount() {
+      if (this.heartbeatTimer !== null) {
+          window.clearInterval(this.heartbeatTimer)
+          this.heartbeatTimer = null
+      }
   },
 
   errorCaptured(err, vm, info) {
