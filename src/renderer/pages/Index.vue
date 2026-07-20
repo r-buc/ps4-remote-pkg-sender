@@ -110,9 +110,9 @@
                 <span class="expand-label">{{ $t('queue.expand.title') }}</span>
                 <span class="expand-value">{{ scope.row.sfo.TITLE }}</span>
               </div>
-              <div class="expand-item" v-if="scope.row.sfo.VERSION">
+              <div class="expand-item" v-if="scope.row.sfo.APP_VER">
                 <span class="expand-label">{{ $t('queue.expand.version') }}</span>
-                <span class="expand-value">{{ scope.row.sfo.VERSION }}</span>
+                <span class="expand-value">{{ scope.row.sfo.APP_VER }}</span>
               </div>
               <div class="expand-item" v-if="scope.row.sfo.CATEGORY">
                 <span class="expand-label">{{ $t('queue.expand.category') }}</span>
@@ -170,17 +170,23 @@
           <template v-if="scope.row.sfo?.readSFOHeader && scope.row.sfo.TITLE">
             <div class="sfo-title">
               <span class="sfo-title-name-tag">{{ scope.row.sfo.TITLE }}</span>
-              <span class="sfo-title-id-tag" v-if="scope.row.sfo.TITLE_ID">{{ scope.row.sfo.TITLE_ID }}</span>
             </div>
             <div class="sfo-subtitle">
               <span class="sfo-filename">{{ scope.row.name }}</span>
+              <el-tag size="small" type="info" class="sfo-contentid-tag" v-if="scope.row.sfo.CONTENT_ID">{{ scope.row.sfo.CONTENT_ID }}</el-tag>
             </div>
           </template>
           <template v-else>
-            <el-tag size="small" type="warning" class="sfo-title-id-tag" v-if="showCUSA && scope.row.cusa">{{ scope.row.cusa }}</el-tag>
             {{ scope.row.name }}
-            <small v-if="scope.row.sfo?.readSFOHeader">(v{{ scope.row.sfo.APP_VER }})</small>
           </template>
+        </template>
+      </el-table-column>
+
+      <el-table-column :label="$t('common.table.titleId')" width="110" align="center">
+        <template #default="scope">
+          <el-tag size="small" type="success" v-if="scope.row.sfo?.TITLE_ID">{{ scope.row.sfo.TITLE_ID }}</el-tag>
+          <el-tag size="small" type="warning" v-else-if="scope.row.cusa">{{ scope.row.cusa }}</el-tag>
+          <span v-else>-</span>
         </template>
       </el-table-column>
 
@@ -196,7 +202,7 @@
       <el-table-column prop="task" :label="$t('common.table.task')" width="105" v-if="showTask && !isPS5"></el-table-column>
       <el-table-column :label="$t('common.table.version')" width="90" v-if="showVersion">
         <template #default="scope">
-          <el-tag size="small" type="info" v-if="scope.row.sfo?.VERSION">{{ scope.row.sfo.VERSION }}</el-tag>
+          <el-tag size="small" type="info" v-if="scope.row.sfo?.APP_VER">{{ scope.row.sfo.APP_VER }}</el-tag>
           <span v-else>-</span>
         </template>
       </el-table-column>
@@ -294,7 +300,6 @@ export default {
 
       loading: false,
       showTask: true,
-      showCUSA: false,
       showVersion: true,
       showPercentage: true,
       showExtension: false,
@@ -1352,26 +1357,6 @@ export default {
     flex-wrap: wrap;
   }
 
-  .sfo-version-tag {
-    display: inline-block;
-    background-color: #ecf5ff;
-    color: #409eff;
-    padding: 0 4px;
-    border-radius: 3px;
-    font-size: 12px;
-    //margin-right: 4px;
-  }
-
-  .sfo-title-id-tag {
-    display: inline-block;
-    background-color: #e8f4ea;
-    color: #1b7a60;
-    padding: 0 5px;
-    border-radius: 3px;
-    font-size: 11px;
-    font-weight: 500;
-  }
-
   .base-blocked-icon {
     color: #e6a23c;
     margin-left: 3px;
@@ -1386,6 +1371,10 @@ export default {
     .sfo-filename {
       display: block;
       word-break: break-all;
+    }
+
+    .sfo-contentid-tag {
+      margin-top: 2px;
     }
   }
 

@@ -146,7 +146,7 @@ let o = {
 
         if( readSFOHeader ){
             sfo = await this.getItemSFO(item)
-            cusa  = sfo.TITLE_ID            
+            cusa  = sfo.TITLE_ID || cusa
         }
 
         // title location 0x40 to 0x63
@@ -281,7 +281,7 @@ let o = {
 
         if( readSFOHeader ){
             sfo = await this.getItemSFO(draggedFilePath)
-            cusa  = sfo.TITLE_ID
+            cusa  = sfo.TITLE_ID || cusa
         }        
         
         return {

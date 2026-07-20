@@ -38,6 +38,7 @@
         element-loading-background="rgba(255, 255, 255, 0.8)"
         :empty-text="$t('common.table.noData')"
         :max-height="tableMaxHeight"
+        :row-class-name="getRowClassName"
         style="width: 100%">
       <el-table-column type="index" label="#" width="55" align="center"></el-table-column>
 
@@ -76,9 +77,9 @@
                 <span class="expand-label">{{ $t('queue.expand.title') }}</span>
                 <span class="expand-value">{{ scope.row.sfo.TITLE }}</span>
               </div>
-              <div class="expand-item" v-if="scope.row.sfo.VERSION">
+              <div class="expand-item" v-if="scope.row.sfo.APP_VER">
                 <span class="expand-label">{{ $t('queue.expand.version') }}</span>
-                <el-tag size="small" type="success">{{ scope.row.sfo.VERSION }}</el-tag>
+                <el-tag size="small" type="success">{{ scope.row.sfo.APP_VER }}</el-tag>
               </div>
               <div class="expand-item" v-if="scope.row.sfo.CATEGORY">
                 <span class="expand-label">{{ $t('queue.expand.category') }}</span>
@@ -109,22 +110,22 @@
             <div class="sfo-title">
               <span class="sfo-title-name-tag">{{ scope.row.sfo.TITLE }}</span>
             </div>
-            <div class="sfo-title">
-              <!--              <el-tag size="small" type="warning" class="sfo-title-id-tag" v-if="showCUSA && scope.row.cusa">{{ scope.row.cusa }}</el-tag>-->
-              <span class="sfo-version-tag" v-if="scope.row.sfo.VERSION">[{{ scope.row.sfo.VERSION }}]</span>
-              <span class="sfo-title-id-tag" v-if="scope.row.sfo.TITLE_ID">[{{ scope.row.sfo.TITLE_ID }}]</span>
-            </div>
             <div class="sfo-subtitle">
               <span class="sfo-filename">{{ scope.row.name }}</span>
-              <el-tag size="small" :type="$helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).color" class="sfo-category-tag" v-if="scope.row.sfo.CATEGORY">{{ $helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).label }}</el-tag>
-              <el-tag size="small" type="info" class="sfo-contentid-tag"> {{ scope.row.sfo.CONTENT_ID }}</el-tag>
+              <el-tag size="small" type="info" class="sfo-contentid-tag" v-if="scope.row.sfo.CONTENT_ID">{{ scope.row.sfo.CONTENT_ID }}</el-tag>
             </div>
           </template>
           <template v-else>
-            <el-tag size="small" type="warning" class="sfo-title-id-tag" v-if="showCUSA && scope.row.cusa">{{ scope.row.cusa }}</el-tag>
             {{ scope.row.name }}
-            <small v-if="scope.row.sfo?.readSFOHeader">(v{{ scope.row.sfo.APP_VER }})</small>
           </template>
+        </template>
+      </el-table-column>
+
+      <el-table-column :label="$t('common.table.titleId')" width="110" align="center">
+        <template #default="scope">
+          <el-tag size="small" type="success" v-if="scope.row.sfo?.TITLE_ID">{{ scope.row.sfo.TITLE_ID }}</el-tag>
+          <el-tag size="small" type="warning" v-else-if="scope.row.cusa">{{ scope.row.cusa }}</el-tag>
+          <span v-else>-</span>
         </template>
       </el-table-column>
 
@@ -134,6 +135,22 @@
               :type="scope.row.ext === '.pkg' ? 'primary' : 'success'"
               disable-transitions>{{ scope.row.ext }}
           </el-tag>
+        </template>
+      </el-table-column>
+
+      <el-table-column :label="$t('common.table.version')" width="90" v-if="showVersion">
+        <template #default="scope">
+          <el-tag size="small" type="info" v-if="scope.row.sfo?.APP_VER">{{ scope.row.sfo.APP_VER }}</el-tag>
+          <span v-else>-</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column :label="$t('common.table.category')" width="90" align="center">
+        <template #default="scope">
+          <el-tag size="small" :type="$helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).color" v-if="scope.row.sfo?.CATEGORY">
+            {{ $helper.getSfoCategoryLabel(scope.row.sfo.CATEGORY).label }}
+          </el-tag>
+          <span v-else>-</span>
         </template>
       </el-table-column>
 
@@ -193,8 +210,7 @@ export default {
       debugItemInRow: true,
 
       showExtension: false,
-      showCUSA: true,
-      showVersion: false,
+      showVersion: true,
       showPercentage: false,
 
       search: '',
@@ -234,7 +250,18 @@ export default {
       if (this.tab == 'dragged')
         finalFiles = this.draggedServingFiles
 
-      return finalFiles.filter(file => this.$helper.matchesFileSearch(file, this.search))
+      const filtered = finalFiles.filter(file => this.$helper.matchesFileSearch(file, this.search))
+      return this.$helper.groupAndSortQueueFiles(filtered)
+    },
+    // Maps each TITLE_ID to a group index so rows can get alternating backgrounds
+    titleIdGroupMap() {
+      const map = new Map()
+      let idx = 0
+      this.files.forEach(file => {
+        const titleId = this.$helper.getTitleIdFromFile(file)
+        if (titleId && !map.has(titleId)) map.set(titleId, idx++)
+      })
+      return map
     },
     tab() {
       return this.$root.serverTab
@@ -242,6 +269,13 @@ export default {
   },
 
   methods: {
+    getRowClassName({ row }) {
+      const titleId = this.$helper.getTitleIdFromFile(row)
+      if (!titleId) return ''
+      const groupIndex = this.titleIdGroupMap.get(titleId)
+      return groupIndex !== undefined && groupIndex % 2 === 1 ? 'row-group-alt' : ''
+    },
+
     reload() {
       if (!this.server.base_path) {
         this.$message({
@@ -460,24 +494,6 @@ export default {
     line-height: 1.3;
   }
 
-  .sfo-version-tag {
-    display: inline-block;
-    background-color: #ecf5ff;
-    color: #409eff;
-    padding: 0 4px;
-    border-radius: 3px;
-    font-size: 12px;
-  }
-
-  .sfo-title-id-tag {
-    display: inline-block;
-    background-color: #ecf5ff;
-    color: #1b7a60;
-    padding: 0 4px;
-    border-radius: 3px;
-    font-size: 12px;
-  }
-
   .sfo-subtitle {
     margin-top: 3px;
     font-size: 12px;
@@ -487,11 +503,6 @@ export default {
     .sfo-filename {
       display: block;
       word-break: break-all;
-    }
-
-    .sfo-category-tag {
-      margin-top: 2px;
-      margin-right: 4px;
     }
 
     .sfo-contentid-tag {
@@ -585,6 +596,17 @@ export default {
     font-size: 11px;
     max-height: 300px;
     overflow: auto;
+  }
+
+  /* Group-alternating row background to visually cluster related packages */
+  ::v-deep .row-group-alt {
+    td {
+      background-color: #f0f4ff;
+    }
+
+    &:hover td {
+      background-color: #e6edfd !important;
+    }
   }
 }
 </style>
