@@ -20,14 +20,13 @@
     "publish": "electron-builder --mac --linux --win --publish onTag",
     "watch": "electron-vite dev",
     "watch:wait": "wait-on http://127.0.0.1:5173 && electron-vite dev",
-    "flatpak:gen": "flatpak-node-generator npm package-lock.json -o flatpak-node-sources.json"
+    "flatpak:gen": "tmp=$(mktemp -d) && cp package-lock.json package.json \"$tmp/\" && flatpak-node-generator npm \"$tmp/package-lock.json\" -o flatpak-node-sources.json && rm -rf \"$tmp\""
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@vitejs/plugin-vue2": "^2.3.3",
     "electron": "^43.1.0",
     "electron-builder": "^26.15.3",
-    "electron-updater": "^6.8.9",
     "electron-vite": "^5.0.0",
     "element-ui": "^2.15.14",
     "json5": "^2.2.3",
