@@ -20,7 +20,7 @@
     "publish": "electron-builder --mac --linux --win --publish onTag",
     "watch": "electron-vite dev",
     "watch:wait": "wait-on http://127.0.0.1:5173 && electron-vite dev",
-    "flatpak:gen": "tmp=$(mktemp -d) && cp package-lock.json package.json \"$tmp/\" && flatpak-node-generator npm \"$tmp/package-lock.json\" -o flatpak-node-sources.json && rm -rf \"$tmp\""
+    "flatpak:gen": "flatpak-node-generator npm package-lock.json -o flatpak-node-sources.json"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
